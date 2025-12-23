@@ -1,0 +1,74 @@
+.dialog-90 {
+  width: 90vw !important;
+  height: 90vh !important;
+  max-width: 90vw !important;
+  max-height: 90vh !important;
+  border-radius: 20px; /* rounded corners */
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25); /* elevated shadow */
+  overflow: hidden; /* clip contents if needed */
+  background-color: #fff; /* white background */
+}
+
+.dialog-card-layout {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.dialog-card-text-half-content {
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100% !important;
+}
+
+.dialog-card-text-with-border {
+  margin: 1rem 0rem !important;
+  min-height: 50%;
+  max-height: 95%;
+  display: flex;
+  flex-grow: 1;
+  border: 1.5px solid #e0e0e0; /* grey-lighten-2 hex from Vuetify palette */
+}
+
+.dialog-card-text-without-border {
+  padding-top: 1rem;
+  max-height: 50%;
+  flex-grow: 1;
+}
+
+.dialog-card-text-title-without-border {
+  max-height: 10%;
+  flex-grow: 1;
+}
+
+.dialog-card-text-fields {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  height: 10%;
+}
+
+.dialog-card-full-height-row {
+  flex-grow: 1;
+  display: flex;
+  padding: 0 0.5rem
+}
+
+.dialog-card-submit-row {
+  flex: 0 0 10%;
+  min-height: 10%;
+  max-height: 10%;
+}
+
+.tight-row {
+  flex: 0 0 auto !important;
+  gap: 0px; /* or whatever small spacing you want */
+  height: auto;
+}
+
+.dialog-card-text-custom {
+
+}
