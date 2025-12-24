@@ -6,6 +6,7 @@
           <v-col md="4">
             <v-card-title>New Case</v-card-title>
           </v-col>
+          <!-- TODO: more actions to be added -->
           <v-col md="4" class="d-flex align-center">
             <v-btn
               color="grey-darken-4"
@@ -27,6 +28,7 @@
         <v-row class="dialog-card-text-with-border rounded-xl"> </v-row>
       </v-col>
       <v-col md="6" class="dialog-card-text-half-content dialog-card-text-with-border rounded-xl">
+        <!-- TODO: Top right corner cancel button to be added -->
         <v-row dense align-start class="tight-row">
           <v-col
             v-for="(field, index) in fields"
@@ -34,13 +36,14 @@
             :md="field.md"
             class="dialog-card-text-fields"
           >
+            <v-label class="dialog-card-text-fields-label">{{ field.label }}</v-label>
             <!-- Text / Email -->
             <v-text-field
               dense
               v-if="field.type === 'text' || field.type === 'email'"
               v-model="form[field.model]"
-              :label="field.label"
               :type="field.type"
+              variant="outlined"
             ></v-text-field>
 
             <!-- Select -->
@@ -48,9 +51,9 @@
               dense
               v-else-if="field.type === 'select'"
               v-model="form[field.model]"
-              :label="field.label"
               :items="field.options"
             ></v-select>
+            <!-- TODO: more fields to be added -->
           </v-col>
         </v-row>
         <v-spacer></v-spacer>
@@ -67,7 +70,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 
-// demo data
+// TODO: demo data to be removed
 const fields = [
   { type: 'text', label: 'First Name', md: 6, model: 'firstName' },
   { type: 'text', label: 'Last Name', md: 6, model: 'lastName' },
@@ -77,7 +80,7 @@ const fields = [
   { type: 'text', label: 'City', md: 6, model: 'city' },
   { type: 'text', label: 'City', md: 6, model: 'city' },
   { type: 'text', label: 'City', md: 6, model: 'city' },
-
+  { type: 'email', label: 'Email', md: 9, model: 'email' },
 ]
 
 const form = reactive<Record<string, string>>({})

@@ -22,6 +22,7 @@
   display: flex;
   flex-direction: column;
   height: 100% !important;
+  width: 45% !important;
 }
 
 .dialog-card-text-with-border {
@@ -69,6 +70,6 @@
   height: auto;
 }
 
-.dialog-card-text-custom {
-
+.dialog-card-text-fields-label {
+  overflow: visible !important;
 }

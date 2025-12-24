@@ -1,7 +1,7 @@
 <template>
   <v-card class="card-layout">
     <v-card-title>Cases Management</v-card-title>
-    <v-card-text>
+    <v-card-text class="h-100">
       <v-row dense>
         <v-col cols="12" md="4">
           <v-select
@@ -63,6 +63,7 @@
           />
         </v-col>
       </v-row>
+      <CaseDataTable></CaseDataTable>
     </v-card-text>
   </v-card>
   <v-dialog v-model="isCaseModalOpen" class="dialog-90" fullscreen hide-overlay>
@@ -73,6 +74,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import CaseModal from '@/components/CaseModal.vue'
+import CaseDataTable from '@/components/CaseDataTable.vue'
 
 const search = ref('')
 const selectedStatuses = ref(null)
@@ -86,7 +88,7 @@ function openNewCaseModal() {
   isCaseModalOpen.value = true
 }
 
-// demo data
+// TODO: demo data to be removed
 const statuses = ['Open', 'In Progress', 'Closed']
 const caseTypes = ['Personal Injury', 'Property', 'Contract']
 const timeFilters = ['Last 7 Days', 'Last 30 Days', 'Last Year']
