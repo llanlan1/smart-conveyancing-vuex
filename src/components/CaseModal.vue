@@ -81,6 +81,8 @@ const fields = [
   { type: 'text', label: 'City', md: 6, model: 'city' },
   { type: 'text', label: 'City', md: 6, model: 'city' },
   { type: 'email', label: 'Email', md: 9, model: 'email' },
+  { type: 'text', label: 'Random Name', md: 6, model: 'firstName' },
+
 ]
 
 const form = reactive<Record<string, string>>({})

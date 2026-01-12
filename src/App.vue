@@ -6,7 +6,6 @@
         alt="Company Logo"
         class="app-bar-layout-img"
       ></v-img>
-      <span class="text-h6">🍌SUPER SMART CONVEYANCING🍌</span>
       <v-spacer></v-spacer>
       <v-btn icon>
         <v-icon>mdi-bell</v-icon>
