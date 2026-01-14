@@ -46,12 +46,6 @@ const routes = [
         component: () => import('@/pages/ClientPage.vue'),
         meta: { requiresAuth: true, title: 'Client' },
       },
-      {
-        path: 'agency', // Full path is /database/agency
-        name: 'AgencyDatabase',
-        component: () => import('@/pages/AgencyPage.vue'),
-        meta: { requiresAuth: true, title: 'Agency' },
-      },
       // ... other database routes
     ],
   },

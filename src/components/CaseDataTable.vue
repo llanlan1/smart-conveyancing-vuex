@@ -6,7 +6,7 @@
     :items-length="totalItems"
     :loading="loading"
     item-value="name"
-    :items-per-page-options="[5, 10, 25, 50, 100]"
+    :items-per-page-options="[10, 25, 50, 100]"
     @update:options="loadItems"
     fixed-header
     fixed-footer
@@ -21,7 +21,22 @@
           @click="handleCellClick(props.item, header.key)"
           style="cursor: pointer"
         >
-          {{ props.item[header.key as keyof CarData] }}
+          <!-- Check if cell value is an array -->
+          <template v-if="Array.isArray(props.item[header.key as keyof CaseData])">
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <v-chip
+                v-for="(item, i) in (props.item[header.key as keyof CaseData] as RoleItem[])"
+                :key="i"
+                size="small"
+              >
+                <strong>{{ item.type }}</strong> - {{ item.name }}
+              </v-chip>
+            </div>
+          </template>
+          <!-- Otherwise display as normal text -->
+          <template v-else>
+            {{ props.item[header.key as keyof CaseData] }}
+          </template>
         </td>
       </tr>
     </template>
@@ -33,50 +48,62 @@ import { ref } from 'vue'
 import { fakeApi } from '@/api/fakeApi'
 
 // TODO: demo data to be removed
-interface CarData {
+interface RoleItem {
+  type: string // BDM, LIC, SIC
+  name: string // Person's name
+}
+
+interface CaseData {
   name: string
   horsepower: number
   fuel: string
   origin: string
   price: number
+  roles?: RoleItem[] // Optional array for cells with multiple elements
 }
 
 interface ApiResponse {
-  items: CarData[]
+  items: CaseData[]
   total: number
 }
 
-const itemsPerPage = ref(5)
-const serverItems = ref<CarData[]>([])
+const itemsPerPage = ref(10)
+const serverItems = ref<CaseData[]>([])
 const loading = ref(true)
 const totalItems = ref(0)
 
 // TODO: demo data to be removed
 const headers = ref<Array<{ title: string; key: string; align: 'start' | 'end' | 'center' }>>([
-  { title: 'Car Model', key: 'name', align: 'start' },
-  { title: 'Horsepower', key: 'horsepower', align: 'end' },
-  { title: 'Fuel Type', key: 'fuel', align: 'start' },
-  { title: 'Origin', key: 'origin', align: 'start' },
-  { title: 'Price ($)', key: 'price', align: 'end' },
+  { title: 'Reference', key: 'reference', align: 'start' },
+  { title: 'Address', key: 'address', align: 'start' },
+  { title: 'Case Type', key: 'caseType', align: 'start' },
+  { title: 'Client', key: 'client', align: 'start' },
+  { title: 'Team', key: 'team', align: 'start' },
+  { title: 'Status', key: 'status', align: 'start' },
+  { title: 'Shortfall', key: 'shortfall', align: 'start' },
+  { title: 'Action', key: 'action', align: 'start' },
+  { title: 'Select All', key: 'selectAll', align: 'center' },
 ])
 
 // TODO: demo data to be removed
 const fakeData = [
-  { name: 'Ford Mustang', horsepower: 450, fuel: 'Gasoline', origin: 'USA', price: 55000 },
-  { name: 'Tesla Model S', horsepower: 670, fuel: 'Electric', origin: 'USA', price: 79999 },
-  { name: 'BMW M3', horsepower: 503, fuel: 'Gasoline', origin: 'Germany', price: 70000 },
-  { name: 'Audi RS6', horsepower: 591, fuel: 'Gasoline', origin: 'Germany', price: 109000 },
-  { name: 'Chevrolet Camaro', horsepower: 650, fuel: 'Gasoline', origin: 'USA', price: 62000 },
-  { name: 'Porsche 911', horsepower: 379, fuel: 'Gasoline', origin: 'Germany', price: 101000 },
-  { name: 'Jaguar F-Type', horsepower: 575, fuel: 'Gasoline', origin: 'UK', price: 61000 },
-  { name: 'Mazda MX-5', horsepower: 181, fuel: 'Gasoline', origin: 'Japan', price: 26000 },
-  { name: 'Nissan GT-R', horsepower: 565, fuel: 'Gasoline', origin: 'Japan', price: 113540 },
-  { name: 'Mercedes-AMG GT', horsepower: 523, fuel: 'Gasoline', origin: 'Germany', price: 115900 },
-  { name: 'Mercedes-AMG GT', horsepower: 523, fuel: 'Gasoline', origin: 'Germany', price: 115900 },
-  { name: 'Mercedes-AMG GT', horsepower: 523, fuel: 'Gasoline', origin: 'Germany', price: 115900 },
-  { name: 'Mercedes-AMG GT', horsepower: 523, fuel: 'Gasoline', origin: 'Germany', price: 115900 },
-  { name: 'Mercedes-AMG GT', horsepower: 523, fuel: 'Gasoline', origin: 'Germany', price: 115900 },
-  { name: 'Mercedes-AMG GT', horsepower: 523, fuel: 'Gasoline', origin: 'Germany', price: 115900 },
+  { name: 'HS(JL).65431', reference: 'HS(JL).65431', address: '123 ABC Avenue 6 #01-02 123456', caseType: 'Sales HDB Flat', client: 'Tan Yu Jing Alice S1234567Z', team: 'BDM SIC LIC' },
+  { name: 'HS(JL).65431', reference: 'HS(JL).65431', address: '123 ABC Avenue 6 #01-02 123456', caseType: 'Sales HDB Flat', client: 'Tan Yu Jing Alice S1234567Z', team: 'BDM SIC LIC' },
+  { name: 'HS(JL).65431', reference: 'HS(JL).65431', address: '123 ABC Avenue 6 #01-02 123456', caseType: 'Sales HDB Flat', client: 'Tan Yu Jing Alice S1234567Z', team: 'BDM SIC LIC' },
+  { name: 'HS(JL).65431', reference: 'HS(JL).65431', address: '123 ABC Avenue 6 #01-02 123456', caseType: 'Sales HDB Flat', client: 'Tan Yu Jing Alice S1234567Z', team: 'BDM SIC LIC' },
+  { name: 'HS(JL).65431', reference: 'HS(JL).65431', address: '123 ABC Avenue 6 #01-02 123456', caseType: 'Sales HDB Flat', client: 'Tan Yu Jing Alice S1234567Z', team: 'BDM SIC LIC' },
+  { name: 'HS(JL).65431', reference: 'HS(JL).65431', address: '123 ABC Avenue 6 #01-02 123456', caseType: 'Sales HDB Flat', client: 'Tan Yu Jing Alice S1234567Z', team: 'BDM SIC LIC' },
+  { name: 'HS(JL).65431', reference: 'HS(JL).65431', address: '123 ABC Avenue 6 #01-02 123456', caseType: 'Sales HDB Flat', client: 'Tan Yu Jing Alice S1234567Z', team: 'BDM SIC LIC' },
+  { name: 'HS(JL).65431', reference: 'HS(JL).65431', address: '123 ABC Avenue 6 #01-02 123456', caseType: 'Sales HDB Flat', client: 'Tan Yu Jing Alice S1234567Z', team: 'BDM SIC LIC' },
+  { name: 'HS(JL).65431', reference: 'HS(JL).65431', address: '123 ABC Avenue 6 #01-02 123456', caseType: 'Sales HDB Flat', client: 'Tan Yu Jing Alice S1234567Z', team: 'BDM SIC LIC' },
+  { name: 'HS(JL).65431', reference: 'HS(JL).65431', address: '123 ABC Avenue 6 #01-02 123456', caseType: 'Sales HDB Flat', client: 'Tan Yu Jing Alice S1234567Z', team: 'BDM SIC LIC' },
+  { name: 'HS(JL).65431', reference: 'HS(JL).65431', address: '123 ABC Avenue 6 #01-02 123456', caseType: 'Sales HDB Flat', client: 'Tan Yu Jing Alice S1234567Z', team: 'BDM SIC LIC' },
+  { name: 'HS(JL).65431', reference: 'HS(JL).65431', address: '123 ABC Avenue 6 #01-02 123456', caseType: 'Sales HDB Flat', client: 'Tan Yu Jing Alice S1234567Z', team: 'BDM SIC LIC' },
+  { name: 'HS(JL).65431', reference: 'HS(JL).65431', address: '123 ABC Avenue 6 #01-02 123456', caseType: 'Sales HDB Flat', client: 'Tan Yu Jing Alice S1234567Z', team: 'BDM SIC LIC' },
+  { name: 'HS(JL).65431', reference: 'HS(JL).65431', address: '123 ABC Avenue 6 #01-02 123456', caseType: 'Sales HDB Flat', client: 'Tan Yu Jing Alice S1234567Z', team: 'BDM SIC LIC' },
+  { name: 'HS(JL).65431', reference: 'HS(JL).65431', address: '123 ABC Avenue 6 #01-02 123456', caseType: 'Sales HDB Flat', client: 'Tan Yu Jing Alice S1234567Z', team: 'BDM SIC LIC' },
+  { name: 'HS(JL).65431', reference: 'HS(JL).65431', address: '123 ABC Avenue 6 #01-02 123456', caseType: 'Sales HDB Flat', client: 'Tan Yu Jing Alice S1234567Z', team: 'BDM SIC LIC' },
+
 ]
 
 const loadItems = ({
@@ -102,7 +129,7 @@ const loadItems = ({
 }
 
 // Function to handle cell clicks
-const handleCellClick = (item: CarData, columnKey: string) => {
+const handleCellClick = (item: CaseData, columnKey: string) => {
   console.log(`Cell clicked: ${columnKey} - `, item)
   // You can trigger other actions here, like opening a modal or editing data
   // For example: openModal(item)

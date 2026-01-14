@@ -1,17 +1,20 @@
 <template>
   <v-app>
-    <v-app-bar app class="app-bar-layout">
-      <v-img
-        src="/src/assets/images/logo.jpg"
-        alt="Company Logo"
-        class="app-bar-layout-img"
-      ></v-img>
+    <v-app-bar app class="app-bar-layout" flat>
+      <div class="page-title">{{ pageTitle }}</div>
       <v-spacer></v-spacer>
       <v-btn icon>
-        <v-icon>mdi-bell</v-icon>
+        <v-icon style="margin-top: 8px;">mdi-bell</v-icon>
       </v-btn>
     </v-app-bar>
     <v-navigation-drawer v-if="!isAuthRoute" app location="left" permanent disable-resize-watcher class="nav-drawer">
+      <div class="app-bar-layout">
+        <v-img
+          src="/src/assets/images/logo.jpg"
+          alt="Company Logo"
+          class="logo-img"
+        ></v-img>
+      </div>
       <div class="menu-scroll">
  <v-list nav>
         <v-list-item title="Dashboard" to="/dashboard" prepend-icon="mdi-view-dashboard" />
@@ -20,7 +23,6 @@
         <v-list-item title="Template" to="/template" prepend-icon="mdi-file-document" />
         <v-list-item title="Workspace" to="/workspace" prepend-icon="mdi-view-grid" />
         <v-list-item title="Clients" to="/clients" prepend-icon="mdi-account-multiple" />
-        <v-list-item title="Agency" to="/agency" prepend-icon="mdi-office-building-outline" />
         <v-list-item title="Ministry of Law" to="/ministryoflaw" prepend-icon="mdi-magnify" />
         <v-list-item title="Company" to="/company" prepend-icon="mdi-bell-outline" />
         <v-list-item title="Knowledge" to="/knowledge" prepend-icon="mdi-book-open-variant" />
@@ -60,5 +62,23 @@ const isAuthRoute = computed(() => {
   // We assume any route with meta.public = true does not need the sidebar
   console.log('Route Meta:', route.meta)
   return route.meta.public === true
+})
+
+// Dynamic page title based on current route
+const pageTitle = computed(() => {
+  const titles: Record<string, string> = {
+    '/dashboard': 'Dashboard',
+    '/cases': 'Cases',
+    '/appointments': 'Appointment',
+    '/template': 'Template',
+    '/workspace': 'Workspace',
+    '/clients': 'Clients',
+    '/ministryoflaw': 'Ministry of Law',
+    '/company': 'Company',
+    '/knowledge': 'Knowledge',
+    '/links': 'Links',
+    '/settings': 'Settings'
+  }
+  return titles[route.path] || ''
 })
 </script>

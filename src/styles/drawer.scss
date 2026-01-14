@@ -7,16 +7,25 @@
   border-radius: 3px;
 }
 
+.logo-img {
+  max-height: 120px !important;
+  max-width: 120px !important;
+  margin-top: -7px;
+  margin-left: -2px;
+}
+
+
 .nav-drawer {
   background-color: #f9f9f9;
   color: #333333;
-  width: 15vw;
-  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.08);
+  width: 18vw;
   border-right: 1px solid #e0e0e0;
   display: flex;
   flex-direction: column;
   padding: 16px;
-  border-radius: 0 8px 8px 0;
+  height: 100vh !important;
+  top: 0 !important;
+  z-index: 1001 !important;
 }
 .nav-drawer .v-navigation-drawer__content {
   display: flex;
@@ -24,7 +33,6 @@
   outline: none;
   background-color: #ffffff; // white background
   border-radius: 16px; // rounded corners
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); // soft shadow
   width: 100%;
 }
 

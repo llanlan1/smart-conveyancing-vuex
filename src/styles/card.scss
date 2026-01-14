@@ -1,14 +1,63 @@
 .card-layout {
-  height: 90vh;
+  height: calc(100vh - 120px);
 }
 
 .card-table {
-  height: 70% !important;
+  height: 100% !important;
   flex-grow: 0; /* Prevent it from stretching */
   flex-shrink: 0; /* Prevent shrinking */
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.card-table .v-data-table {
+  padding: 0 !important;
 }
 
 .card-table .v-data-table__wrapper {
   max-height: 100%; /* Ensure the table body fills the 50% height */
   overflow-y: auto; /* Enable vertical scrolling */
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.card-table table {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.card-table thead {
+  background-color: #f5f5f5 !important;
+}
+
+.card-table th {
+  background-color: #f5f5f5 !important;
+}
+
+.v-card {
+  border-radius: 16px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.v-card-no-shadow {
+  padding: 4px !important;
+  box-shadow: none !important;
+}
+
+.filters-card {
+  box-shadow: none !important;
+  margin: 0 !important;
+}
+
+.filters-card v-card-text {
+  padding: 0 !important;
+}
+
+.filters-card .v-row {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.filters-card .v-col {
+  padding: 0 !important;
 }

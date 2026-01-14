@@ -1,0 +1,38 @@
+// Modular button classes for consistent styling across the app
+
+// Remove shadow from buttons
+.btn-no-shadow {
+  box-shadow: none !important;
+}
+
+.btn-no-shadow:hover {
+  box-shadow: none !important;
+}
+
+.btn-no-shadow:active {
+  box-shadow: none !important;
+}
+
+.btn-no-shadow:focus {
+  box-shadow: none !important;
+}
+
+// Title case text transform
+.btn-title-case {
+  text-transform: capitalize !important;
+}
+
+// Combined class for clean buttons (no shadow + title case)
+.btn-clean {
+  box-shadow: none !important;
+  text-transform: capitalize !important;
+  font-weight: 600 !important;
+  font-size: larger !important;
+  letter-spacing: 0.3px !important;
+}
+
+.btn-clean:hover,
+.btn-clean:active,
+.btn-clean:focus {
+  box-shadow: none !important;
+}
