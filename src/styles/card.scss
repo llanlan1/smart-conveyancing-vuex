@@ -3,7 +3,6 @@
 }
 
 .card-table {
-  height: 100% !important;
   flex-grow: 0; /* Prevent it from stretching */
   flex-shrink: 0; /* Prevent shrinking */
   padding: 0 !important;
@@ -60,4 +59,8 @@
 
 .filters-card .v-col {
   padding: 0 !important;
+}
+
+.card-content-height {
+  height: 70vh !important;
 }

@@ -4,7 +4,18 @@
       <v-col md="6" class="dialog-card-text-half-content">
         <v-row class="dialog-card-text-title-without-border">
           <v-col md="4">
-            <v-card-title>New Case</v-card-title>
+            <!-- New case: show text field for reference input -->
+            <v-text-field
+              v-if="isNew"
+              v-model="newReferenceInput.value"
+              placeholder="Enter Reference Number"
+              variant="outlined"
+              density="compact"
+              class="reference-input"
+              hide-details
+            ></v-text-field>
+            <!-- Existing case: show reference as title -->
+            <v-card-title v-else>{{ modalTitle }}</v-card-title>
           </v-col>
           <!-- TODO: more actions to be added -->
           <v-col md="4" class="d-flex align-center">
@@ -68,7 +79,45 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, computed, watch } from 'vue'
+
+// Props interface
+interface CaseData {
+  name: string
+  reference: string
+  systemReference: string
+  address: string
+  caseType: string
+  client: string
+  team: string
+  status?: string
+  shortfall?: string
+}
+
+const props = defineProps<{
+  isNew: boolean
+  caseData: CaseData | null
+}>()
+
+// Computed title - shows reference for existing case
+const modalTitle = computed(() => {
+  if (props.isNew) {
+    return '' // Will show text field instead
+  }
+  return props.caseData?.reference || 'Case Details'
+})
+
+// Reference input for new cases
+const newReferenceInput = reactive({
+  value: ''
+})
+
+// Watch for changes to reset the input when opening a new case
+watch(() => props.isNew, (isNew) => {
+  if (isNew) {
+    newReferenceInput.value = ''
+  }
+})
 
 // TODO: demo data to be removed
 const fields = [
@@ -93,5 +142,15 @@ fields.forEach((f) => {
 
 function submit() {
   console.log(form)
+  // Include the reference for new cases
+  if (props.isNew && newReferenceInput.value) {
+    console.log('New case reference:', newReferenceInput.value)
+  }
 }
 </script>
+
+<style scoped>
+.reference-input {
+  max-width: 200px;
+}
+</style>
