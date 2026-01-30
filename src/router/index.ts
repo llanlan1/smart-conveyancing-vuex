@@ -21,33 +21,16 @@ const routes = [
     meta: { requiresAuth: true, title: 'Cases Management' },
   },
   {
-    path: '/appointment',
-    name: 'Appointment',
-    // Lazy loading for better performance, loads the component only when needed
-    component: () => import('@/pages/AppointmentPage.vue'),
-    meta: { requiresAuth: true, title: 'Appointments' },
-  },
-  {
     path: '/template',
     name: 'Template',
     component: () => import('@/pages/TemplatePage.vue'),
     meta: { requiresAuth: true, title: 'Document Templates' },
   },
-  // --- Database Menu Routes (Example of nested routing) ---
   {
-    path: '/database',
-    name: 'Database',
-    // Could use a wrapper component here if all database views share a sub-layout
-    // component: DatabaseLayout,
-    children: [
-      {
-        path: 'client', // Full path is /database/client
-        name: 'ClientDatabase',
-        component: () => import('@/pages/ClientPage.vue'),
-        meta: { requiresAuth: true, title: 'Client' },
-      },
-      // ... other database routes
-    ],
+    path: '/insights',
+    name: 'Insights',
+    component: () => import('@/pages/InsightsPage.vue'),
+    meta: { requiresAuth: true, title: 'Insights' },
   },
 
   // --- Catch-all 404 Route ---

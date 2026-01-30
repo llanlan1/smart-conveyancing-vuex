@@ -19,11 +19,10 @@
  <v-list nav>
         <v-list-item title="Dashboard" to="/dashboard" prepend-icon="mdi-view-dashboard" />
         <v-list-item title="Cases" to="/cases" prepend-icon="mdi-file-document" />
-        <v-list-item title="Appointment" to="/appointments" prepend-icon="mdi-calendar" />
         <v-list-item title="Template" to="/template" prepend-icon="mdi-file-document" />
+        <v-list-item title="Insights" to="/insights" prepend-icon="mdi-chart-areaspline" />
         <v-list-item title="Workspace" to="/workspace" prepend-icon="mdi-view-grid" />
-        <v-list-item title="Clients" to="/clients" prepend-icon="mdi-account-multiple" />
-        <v-list-item title="Ministry of Law" to="/ministryoflaw" prepend-icon="mdi-magnify" />
+        <v-list-item title="Team Assignment" to="/teamassignment" prepend-icon="mdi-account-multiple" />
         <v-list-item title="Company" to="/company" prepend-icon="mdi-bell-outline" />
         <v-list-item title="Knowledge" to="/knowledge" prepend-icon="mdi-book-open-variant" />
         <v-list-item title="Links" to="/links" prepend-icon="mdi-link-variant" />
@@ -69,10 +68,9 @@ const pageTitle = computed(() => {
   const titles: Record<string, string> = {
     '/dashboard': 'Dashboard',
     '/cases': 'Cases',
-    '/appointments': 'Appointment',
     '/template': 'Template',
+    '/insights': 'Insights',
     '/workspace': 'Workspace',
-    '/clients': 'Clients',
     '/ministryoflaw': 'Ministry of Law',
     '/company': 'Company',
     '/knowledge': 'Knowledge',
