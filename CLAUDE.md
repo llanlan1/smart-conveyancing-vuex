@@ -6,6 +6,7 @@
 
 - ✅ Fix button color → Change button color only
 - ✅ Rename function → Update function + all callers (necessary cascading)
+- ✅ Do it in a modular way as much as possible reasonably, wherever necessary (clean code)
 - ❌ Fix button color → Also refactor component structure (NOT asked)
 - ❌ Add field → Also add validation, error handling, tooltips (NOT asked)
 

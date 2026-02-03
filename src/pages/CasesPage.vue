@@ -71,7 +71,13 @@
     </v-card-text>
   </v-card>
   <v-dialog v-model="isCaseModalOpen" class="dialog-90" fullscreen hide-overlay>
-    <CaseModal :is-new="isNewCase" :case-data="selectedCase" />
+  <CaseModal
+    :is-new="isNewCase"
+    :case-data="selectedCase"
+    :buttons="[
+      { label: 'Save Draft', icon: 'mdi-content-save', color: 'white', height: '100', width: '120', rounded: 'lg' }
+    ]"
+  />
   </v-dialog>
 </template>
 

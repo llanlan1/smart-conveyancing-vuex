@@ -231,4 +231,5 @@ const handleReferenceClick = (item: CaseData, refType: 'user' | 'system') => {
   padding-top: 12px !important;
   padding-bottom: 12px !important;
 }
+
 </style>
