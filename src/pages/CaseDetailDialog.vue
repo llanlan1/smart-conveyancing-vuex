@@ -117,7 +117,9 @@ const caseId = computed(() => route.params.id as string)
 const caseDetail = ref<CaseDetail>({
   reference: '',
   systemReference: '',
-  caseType: ''
+  address: '',
+  caseType: '',
+  client: ''
 })
 
 const buttons: ButtonConfig[] = [
@@ -131,7 +133,9 @@ onMounted(() => {
   caseDetail.value = {
     reference: caseId.value || 'HS(JL).65431',
     systemReference: 'SOW-1-2026',
-    caseType: 'Sales'
+    address: '123 ABCDE Ave 3 #01-02 123456',
+    caseType: 'Sales',
+    client: 'Alice Tan'
   }
 })
 

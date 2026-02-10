@@ -60,14 +60,10 @@ export interface TeamData {
   secretaryIc: string
 }
 
-export interface Document {
-  name: string
-  type: string
-  previewUrl?: string
-}
-
 export interface CaseDetail {
   reference: string
   systemReference: string
+  address: string
   caseType: string
+  client: string
 }

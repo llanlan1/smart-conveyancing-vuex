@@ -42,7 +42,7 @@ const routes = [
         path: ':id/shortfall',
         name: 'CaseShortfall',
         component: () => import('@/pages/ShortfallDialog.vue'),
-        meta: { title: 'Shortfall Analysis' },
+        meta: { title: 'Shortfall' },
       },
     ],
   },

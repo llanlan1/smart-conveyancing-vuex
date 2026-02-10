@@ -211,23 +211,11 @@
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import type { ButtonConfig } from '@/common/types'
+import type { Document, CaseDetail, ButtonConfig } from '@/common/types'
 import DialogHeader from '@/components/dialog-sections/DialogHeader.vue'
 import CaseHeaderInfo from '@/components/dialog-sections/CaseHeaderInfo.vue'
 import DocumentViewer from '@/components/dialog-sections/DocumentViewer.vue'
 
-interface Document {
-  name: string
-  type: string
-  previewUrl?: string
-}
-
-interface CaseDetail {
-  reference: string
-  client: string
-  address: string
-  caseType: string
-}
 
 const route = useRoute()
 
@@ -236,9 +224,10 @@ const caseId = computed(() => route.params.id as string)
 
 const caseDetail = ref<CaseDetail>({
   reference: '',
-  client: '',
+  systemReference: '',
   address: '',
-  caseType: ''
+  caseType: '',
+  client: ''
 })
 
 const shortfallButtons: ButtonConfig[] = [
@@ -271,9 +260,10 @@ onMounted(() => {
   // TODO: fetch case data from API using caseId
   caseDetail.value = {
     reference: caseId.value || 'HS(JL).65431',
-    client: 'Wong Xi An Sandy\nJorriah Ang Li Weng',
+    systemReference: 'SOW-1-2026',
     address: '123 ABCDE Ave 3 #01-02 123456',
-    caseType: 'Sales HDB Flat'
+    caseType: 'Sales HDB Flat',
+    client: 'Wong Xi An Sandy\nJorriah Ang Li Weng'
   }
 })
 

@@ -258,19 +258,7 @@ import { useRoute } from 'vue-router'
 import DialogHeader from '@/components/dialog-sections/DialogHeader.vue'
 import CaseHeaderInfo from '@/components/dialog-sections/CaseHeaderInfo.vue'
 import DocumentViewer from '@/components/dialog-sections/DocumentViewer.vue'
-
-interface Document {
-  name: string
-  type: string
-  previewUrl?: string
-}
-
-interface CaseDetail {
-  reference: string
-  systemReference: string
-  address: string
-  caseType: string
-}
+import type { Document, CaseDetail } from '@/common/types'
 
 const route = useRoute()
 
@@ -281,7 +269,8 @@ const caseDetail = ref<CaseDetail>({
   reference: '',
   systemReference: '',
   address: '',
-  caseType: ''
+  caseType: '',
+  client: ''
 })
 
 const form = reactive({
@@ -320,7 +309,8 @@ onMounted(() => {
     reference: caseId.value || 'HS(JL).65431',
     systemReference: 'SOW-1-2026',
     address: '123 ABCDE Ave 3 #01-02 123456',
-    caseType: 'Sales HDB Flat'
+    caseType: 'Sales HDB Flat',
+    client: 'Alice Tan'
   }
 })
 
