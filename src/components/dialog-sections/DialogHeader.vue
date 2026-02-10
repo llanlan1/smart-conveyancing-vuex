@@ -36,17 +36,12 @@
     </v-col>
 
     <!-- Right side: Buttons -->
-    <v-col
-      v-for="(button, index) in buttons"
-      :key="index"
-      :md="buttonColWidth"
-      class="d-flex align-center"
-      :class="{ 'ml-auto': index === 0 }"
-    >
+    <v-col v-if="buttons && buttons.length > 0" class="d-flex align-center justify-end header-buttons-col">
       <v-btn
+        v-for="(button, index) in buttons"
+        :key="index"
         :color="button.color || 'white'"
         rounded="lg"
-        block
         class="text-none header-btn"
         :prepend-icon="button.icon"
         @click="$emit('button-click', button.label)"
@@ -112,15 +107,7 @@ function handleEditComplete() {
 
 const leftColWidth = computed(() => {
   if (!props.buttons || props.buttons.length === 0) return 12
-  if (props.buttons.length === 1) return 7
-  if (props.buttons.length === 2) return 6
   return 5
-})
-
-const buttonColWidth = computed(() => {
-  if (!props.buttons || props.buttons.length === 0) return 0
-  if (props.buttons.length === 1) return 4
-  return 2
 })
 </script>
 
@@ -153,6 +140,10 @@ const buttonColWidth = computed(() => {
 
 .header-input {
   max-width: 250px;
+}
+
+.header-buttons-col {
+  gap: 12px;
 }
 
 .header-btn {
