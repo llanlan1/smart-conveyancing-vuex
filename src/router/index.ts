@@ -17,8 +17,34 @@ const routes = [
   {
     path: '/cases',
     name: 'Cases',
-    component: () => import('@/pages/CasesPage.vue'), // This is the view you see in the screenshot
+    component: () => import('@/pages/CasesPage.vue'),
     meta: { requiresAuth: true, title: 'Cases Management' },
+    children: [
+      {
+        path: 'new',
+        name: 'NewCase',
+        component: () => import('@/pages/NewCheckDialog.vue'),
+        meta: { title: 'New Case' },
+      },
+      {
+        path: ':id/detail',
+        name: 'CaseDetail',
+        component: () => import('@/pages/CaseDetailDialog.vue'),
+        meta: { title: 'Case Detail' },
+      },
+      {
+        path: ':id/client',
+        name: 'CaseClient',
+        component: () => import('@/pages/ClientDialog.vue'),
+        meta: { title: 'Client Details' },
+      },
+      {
+        path: ':id/shortfall',
+        name: 'CaseShortfall',
+        component: () => import('@/pages/ShortfallDialog.vue'),
+        meta: { title: 'Shortfall Analysis' },
+      },
+    ],
   },
   {
     path: '/template',

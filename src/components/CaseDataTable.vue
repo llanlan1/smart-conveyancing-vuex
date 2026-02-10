@@ -66,6 +66,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { fakeApi } from '@/api/fakeApi'
+import type { CaseData, RoleItem, ApiResponse } from '@/common/types'
 
 // Define which columns should open modal with reference title
 const columnsWithReferenceTitle = ['reference', 'address', 'caseType', 'roles', 'shortfall']
@@ -82,29 +83,6 @@ const emit = defineEmits<{
   (e: 'open-case', caseData: CaseData, column: string): void
 }>()
 
-// TODO: demo data to be removed
-interface RoleItem {
-  type: string // BDM, LIC, SIC
-  name: string // Person's name
-}
-
-interface CaseData {
-  name: string
-  reference: string
-  systemReference: string // Auto-generated system reference
-  address: string
-  caseType: string
-  client: string
-  status?: string
-  shortfall?: string
-  createdAt: string // Hidden field for sorting (newest/oldest)
-  roles: RoleItem[] // Array of role assignments (BDM, LIC, SIC, etc.)
-}
-
-interface ApiResponse {
-  items: CaseData[]
-  total: number
-}
 
 const itemsPerPage = ref(5)
 const serverItems = ref<CaseData[]>([])

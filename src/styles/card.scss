@@ -14,8 +14,8 @@
 }
 
 .card-table .v-data-table__wrapper {
-  max-height: 100%; /* Ensure the table body fills the 50% height */
-  overflow-y: auto; /* Enable vertical scrolling */
+  max-height: 100%;
+  overflow-y: auto;
   padding: 0 !important;
   margin: 0 !important;
 }

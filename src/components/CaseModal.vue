@@ -248,29 +248,8 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, watch } from 'vue'
+import type { CaseData, ButtonConfig } from '@/common/types'
 
-// Props interface
-interface CaseData {
-  name: string
-  reference: string
-  systemReference: string
-  address: string
-  caseType: string
-  client: string
-  team: string
-  status?: string
-  shortfall?: string
-}
-
-interface ButtonConfig {
-  label: string
-  icon: string
-  color: string
-  outlined?: boolean
-  height?: string
-  width?: string
-  rounded?: string
-}
 
 const props = defineProps<{
   isNew: boolean
