@@ -79,23 +79,7 @@
 
 <script setup lang="ts">
 import { reactive, computed } from 'vue'
-
-interface PropertyFormData {
-  propertyType: string
-  checkEthnicQuota: boolean
-  postcode: string
-  floor: string
-  unit: string
-  block: string
-  street: string
-  buildingName: string
-  propertyPrice: string
-  optionDate: string
-  optionExpiry: string
-  completionDate: string
-  weeksUponExercising: string
-  [key: string]: string | boolean
-}
+import type { PropertyFormData } from '@/common/types'
 
 const props = defineProps<{
   modelValue?: Partial<PropertyFormData>

@@ -100,12 +100,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-
-interface Document {
-  name: string
-  type: string
-  previewUrl?: string
-}
+import type { Document } from '@/common/types'
 
 const props = defineProps<{
   modelValue?: Document[]

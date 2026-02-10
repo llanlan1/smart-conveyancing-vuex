@@ -5,10 +5,10 @@
       <v-col md="6" class="dialog-card-text-half-content">
         <DialogHeader
           :title="caseDetail.reference"
-          title-icon="link"
-          :title-link="`#${caseDetail.reference}`"
+          title-icon="edit"
           :subtitle="systemReference"
           :buttons="buttons"
+          @update:title="handleTitleUpdate"
         />
 
         <!-- Case Type row -->
@@ -99,24 +99,12 @@
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import type { ButtonConfig } from '@/common/types'
+import type { ButtonConfig, Document, CaseDetail } from '@/common/types'
 import DialogHeader from '@/components/dialog-sections/DialogHeader.vue'
 import TeamFields from '@/components/dialog-sections/TeamFields.vue'
 import DocumentViewer from '@/components/dialog-sections/DocumentViewer.vue'
 import RoleSelector from '@/components/dialog-sections/RoleSelector.vue'
 import PropertyFields from '@/components/dialog-sections/PropertyFields.vue'
-
-interface Document {
-  name: string
-  type: string
-  previewUrl?: string
-}
-
-interface CaseDetail {
-  reference: string
-  systemReference: string
-  caseType: string
-}
 
 const route = useRoute()
 
@@ -193,6 +181,11 @@ const hasOtpUploaded = computed(() => {
 
 function handleNext() {
   emit('next')
+}
+
+function handleTitleUpdate(newTitle: string) {
+  caseDetail.value.reference = newTitle
+  // TODO: save to API
 }
 </script>
 

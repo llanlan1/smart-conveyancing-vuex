@@ -30,3 +30,44 @@ export interface ButtonConfig {
   width?: string
   rounded?: string
 }
+
+export interface Document {
+  name: string
+  type: string
+  previewUrl?: string
+}
+
+export interface PropertyFormData {
+  propertyType: string
+  checkEthnicQuota: boolean
+  postcode: string
+  floor: string
+  unit: string
+  block: string
+  street: string
+  buildingName: string
+  propertyPrice: string
+  optionDate: string
+  optionExpiry: string
+  completionDate: string
+  weeksUponExercising: string
+  [key: string]: string | boolean
+}
+
+export interface TeamData {
+  bdm: string
+  lawyerIc: string
+  secretaryIc: string
+}
+
+export interface Document {
+  name: string
+  type: string
+  previewUrl?: string
+}
+
+export interface CaseDetail {
+  reference: string
+  systemReference: string
+  caseType: string
+}

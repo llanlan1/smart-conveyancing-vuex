@@ -57,13 +57,8 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
-
-interface TeamData {
-  bdm: string
-  lawyerIc: string
-  secretaryIc: string
-}
+import { reactive, watch } from 'vue'
+import type { TeamData } from '@/common/types'
 
 const props = defineProps<{
   modelValue?: TeamData
@@ -81,6 +76,10 @@ const team = reactive<TeamData>({
   lawyerIc: props.modelValue?.lawyerIc || '',
   secretaryIc: props.modelValue?.secretaryIc || ''
 })
+
+watch(team, (val) => {
+  emit('update:modelValue', { ...val })
+}, { deep: true })
 
 const saveFlags = reactive({
   bdm: false,
