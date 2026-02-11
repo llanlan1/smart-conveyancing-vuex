@@ -9,6 +9,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
   padding: 1rem;
   border-radius: 25px !important;
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25) !important;
@@ -26,7 +27,6 @@
   padding: 1.5em !important;
   box-sizing: border-box;
 }
-
 
 .dialog-card-text-with-border {
   margin: 1rem 0rem !important;
@@ -58,7 +58,7 @@
 .dialog-card-full-height-row {
   flex-grow: 1;
   display: flex;
-  padding: 0 0.5rem
+  padding: 0 0.5rem;
 }
 
 .dialog-card-submit-row {
@@ -77,3 +77,15 @@
   overflow: visible !important;
 }
 
+.dialog-card-layout-reduced-height {
+  overflow-y: auto;
+
+  /* inset scrollbar */
+  padding-right: 14px;
+  margin-right: -8px;
+
+  /* inset top/bottom so scrollbar doesn't reach corners */
+  padding-top: 12px;
+  padding-bottom: 12px;
+
+}
