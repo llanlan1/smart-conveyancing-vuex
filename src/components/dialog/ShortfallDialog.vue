@@ -3,11 +3,25 @@
     <v-row class="dialog-card-full-height-row">
       <!-- Left Column -->
       <v-col md="6" class="dialog-card-text-half-content">
-        <DialogHeader
-          :title="caseDetail.reference"
-          title-icon="edit"
-          :buttons="shortfallButtons"
-        />
+        <v-row dense align="center" justify="space-between">
+          <v-col>
+            <DialogHeader
+              :reference-number="caseDetail.reference"
+              :address="caseDetail.address"
+              :case-type="caseDetail.caseType"
+            />
+          </v-col>
+          <v-col cols="auto">
+            <v-btn
+              color="white"
+              rounded="lg"
+              class="text-none header-btn"
+              prepend-icon="mdi-content-save"
+            >
+              Save Draft
+            </v-btn>
+          </v-col>
+        </v-row>
 
         <CaseHeaderInfo
           ref-label="Client"
@@ -86,11 +100,11 @@
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import type { Document, CaseDetail, ButtonConfig } from '@/common/types'
-import DialogHeader from '@/components/dialog-sections/DialogHeader.vue'
-import CaseHeaderInfo from '@/components/dialog-sections/CaseHeaderInfo.vue'
-import DocumentViewer from '@/components/dialog-sections/DocumentViewer.vue'
-import FormFieldsSection from '@/components/dialog-sections/FormFieldsSection.vue'
+import type { Document, CaseDetail } from '@/common/types'
+import DialogHeader from '@/components/dialog-sections/ReadOnlyDialogHeader.vue'
+import CaseHeaderInfo from '@/components/dialog-sections/DialogHeaderFields.vue'
+import DocumentViewer from '@/components/dialog-sections/UploadViewDocument.vue'
+import FormFieldsSection, { type FormFieldConfig } from '@/components/dialog-sections/RightSideFields.vue'
 
 
 const route = useRoute()
@@ -106,9 +120,6 @@ const caseDetail = ref<CaseDetail>({
   client: ''
 })
 
-const shortfallButtons: ButtonConfig[] = [
-  { label: 'Save Draft', icon: 'mdi-content-save', color: 'white' }
-]
 
 const form = reactive({
   remarks: '',
@@ -123,7 +134,7 @@ const approvedTypeOptions = ['Loan Approved', 'CPF Approved']
 const grantTypeOptions = ['HDB Grant', 'CPF Grant']
 const incomeTypeOptions = ['NOA - Past 1 Year', 'NOA - Past 2 Years', 'NOA - Past 3 Years']
 
-const shortfallFields = [
+const shortfallFields: FormFieldConfig[] = [
   { type: 'text', label: 'Property Price', model: 'propertyPrice', md: 6, placeholder: 'SGD' },
   { type: 'text', label: 'Occupation', model: 'occupation', md: 6 },
   { type: 'text', label: 'Approved Amount', model: 'approvedAmount', md: 6, placeholder: 'SGD' },

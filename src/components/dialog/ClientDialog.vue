@@ -4,7 +4,9 @@
       <!-- Left Column -->
       <v-col md="6" class="dialog-card-text-half-content">
         <DialogHeader
-          :title="caseDetail.systemReference"
+          :reference-number="caseDetail.reference"
+          :address="caseDetail.address"
+          :case-type="caseDetail.caseType"
         />
 
         <CaseHeaderInfo
@@ -94,10 +96,10 @@
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import DialogHeader from '@/components/dialog-sections/DialogHeader.vue'
-import CaseHeaderInfo from '@/components/dialog-sections/CaseHeaderInfo.vue'
-import DocumentViewer from '@/components/dialog-sections/DocumentViewer.vue'
-import FormFieldsSection from '@/components/dialog-sections/FormFieldsSection.vue'
+import DialogHeader from '@/components/dialog-sections/ReadOnlyDialogHeader.vue'
+import CaseHeaderInfo from '@/components/dialog-sections/DialogHeaderFields.vue'
+import DocumentViewer from '@/components/dialog-sections/UploadViewDocument.vue'
+import FormFieldsSection, { type FormFieldConfig } from '@/components/dialog-sections/RightSideFields.vue'
 import type { Document, CaseDetail } from '@/common/types'
 
 const route = useRoute()
@@ -128,7 +130,7 @@ const idTypeOptions = ['IC', 'Passport', 'FIN', 'Birth Certificate']
 const countryOptions = ['Singapore', 'Malaysia', 'Indonesia', 'China', 'India']
 const additionalPersonOptions = ['Select', 'None', 'Client', 'Nominee', 'POA - Donee', 'Trustee', 'Executor']
 
-const clientFields = computed(() => [
+const clientFields = computed<FormFieldConfig[]>(() => [
   { type: 'select', label: 'Role', model: 'role', md: 4, items: roleOptions, defaultValue: 'Main Client' },
   { type: 'select', label: 'Marital Status', model: 'maritalStatus', md: 4, items: maritalStatusOptions, defaultValue: 'Unknown' },
   { type: 'select', label: 'ID Type', model: 'idType', md: 4, items: idTypeOptions, defaultValue: 'IC' },

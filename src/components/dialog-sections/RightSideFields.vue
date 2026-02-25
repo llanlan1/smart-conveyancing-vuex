@@ -71,7 +71,7 @@
 <script setup lang="ts">
 import { reactive, computed, watch } from 'vue'
 
-interface FormFieldConfig {
+export interface FormFieldConfig {
   type: 'text' | 'select' | 'date' | 'checkbox' | 'divider'
   label?: string
   model?: string

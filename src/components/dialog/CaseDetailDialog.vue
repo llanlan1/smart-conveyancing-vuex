@@ -118,7 +118,7 @@ import DialogHeader from '@/components/dialog-sections/DialogHeaderFields.vue'
 import TeamFields from '@/components/dialog-sections/TeamFields.vue'
 import DocumentViewer from '@/components/dialog-sections/UploadViewDocument.vue'
 import RoleSelector from '@/components/dialog-sections/IndividualCommercialToggle.vue'
-import FormFieldsSectionRight from '@/components/dialog-sections/RightSideFields.vue'
+import FormFieldsSectionRight, { type FormFieldConfig } from '@/components/dialog-sections/RightSideFields.vue'
 
 const route = useRoute()
 
@@ -180,7 +180,7 @@ const propertyData = reactive({})
 // TODO: demo data to be removed
 const propertyTypeOptions = ['HDB Resale', 'Private', 'Commercial']
 
-const propertyFields = [
+const propertyFields: FormFieldConfig[] = [
   { type: 'select', label: 'Property Type', model: 'propertyType', md: 5, items: propertyTypeOptions },
   { type: 'checkbox', label: 'Check Ethnic Quota', model: 'checkEthnicQuota', md: 7 },
   { type: 'text', label: 'Postcode', model: 'postcode', md: 4, copyable: true },
