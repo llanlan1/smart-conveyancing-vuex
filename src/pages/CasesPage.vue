@@ -72,7 +72,7 @@
   </v-card>
 
   <!-- Dialog container for child routes -->
-  <v-dialog v-model="isDialogOpen" class="dialog-90">
+  <v-dialog v-model="isDialogOpen" class="dialog-90" @dragover.prevent @drop.prevent>
     <v-btn
       icon
       variant="text"

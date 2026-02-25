@@ -82,14 +82,28 @@
         </div>
 
         <div class="right-content-scrollable flex-grow-1">
-          <PropertyFields
+          <FormFieldsSectionRight
+            :fields="propertyFields"
             v-model="propertyData"
-            :show-copy-icons="true"
-            :show-ethnic-quota="true"
-            :identity-check-disabled="!hasOtpUploaded"
             submit-label="Next"
             @submit="handleNext"
-          />
+          >
+            <v-row dense class="mt-3 mb-4">
+              <v-col cols="12">
+                <v-btn
+                  block
+                  rounded="xl"
+                  color="grey-darken-3"
+                  class="text-none"
+                  style="letter-spacing: 0.4px"
+                  height="45px"
+                  :disabled="!hasOtpUploaded"
+                >
+                  Go to Identity Check
+                </v-btn>
+              </v-col>
+            </v-row>
+          </FormFieldsSectionRight>
         </div>
       </v-col>
     </v-row>
@@ -100,11 +114,11 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import type { ButtonConfig, Document, CaseDetail } from '@/common/types'
-import DialogHeader from '@/components/dialog-sections/DialogHeader.vue'
+import DialogHeader from '@/components/dialog-sections/DialogHeaderFields.vue'
 import TeamFields from '@/components/dialog-sections/TeamFields.vue'
-import DocumentViewer from '@/components/dialog-sections/DocumentViewer.vue'
-import RoleSelector from '@/components/dialog-sections/RoleSelector.vue'
-import PropertyFields from '@/components/dialog-sections/PropertyFields.vue'
+import DocumentViewer from '@/components/dialog-sections/UploadViewDocument.vue'
+import RoleSelector from '@/components/dialog-sections/IndividualCommercialToggle.vue'
+import FormFieldsSectionRight from '@/components/dialog-sections/RightSideFields.vue'
 
 const route = useRoute()
 
@@ -147,7 +161,7 @@ const form = reactive({
   phone: '',
   email: '',
   role: 'Client',
-  roleType: 'individual' as 'individual' | 'corporate'
+  roleType: 'individual' as 'individual' | 'commercial'
 })
 
 const clientFlags = reactive({
@@ -161,21 +175,26 @@ const teamData = reactive({
   secretaryIc: ''
 })
 
-const propertyData = reactive({
-  propertyType: '',
-  checkEthnicQuota: false,
-  postcode: '',
-  floor: '',
-  unit: '',
-  block: '',
-  street: '',
-  buildingName: '',
-  propertyPrice: '',
-  optionDate: '',
-  optionExpiry: '',
-  completionDate: '',
-  weeksUponExercising: ''
-})
+const propertyData = reactive({})
+
+// TODO: demo data to be removed
+const propertyTypeOptions = ['HDB Resale', 'Private', 'Commercial']
+
+const propertyFields = [
+  { type: 'select', label: 'Property Type', model: 'propertyType', md: 5, items: propertyTypeOptions },
+  { type: 'checkbox', label: 'Check Ethnic Quota', model: 'checkEthnicQuota', md: 7 },
+  { type: 'text', label: 'Postcode', model: 'postcode', md: 4, copyable: true },
+  { type: 'text', label: 'Floor', model: 'floor', md: 2, copyable: true },
+  { type: 'text', label: 'Unit', model: 'unit', md: 2, copyable: true },
+  { type: 'text', label: 'Block', model: 'block', md: 3, copyable: true },
+  { type: 'text', label: 'Street', model: 'street', md: 6, copyable: true },
+  { type: 'text', label: 'Building Name', model: 'buildingName', md: 5 },
+  { type: 'text', label: 'Property Price', model: 'propertyPrice', md: 3 },
+  { type: 'date', label: 'Option Date', model: 'optionDate', md: 4 },
+  { type: 'date', label: 'Option Expiry', model: 'optionExpiry', md: 4 },
+  { type: 'date', label: 'Completion Date', model: 'completionDate', md: 4 },
+  { type: 'text', label: 'No. of Weeks upon exercising', model: 'weeksUponExercising', md: 2 },
+]
 
 const documents = ref<Document[]>([])
 

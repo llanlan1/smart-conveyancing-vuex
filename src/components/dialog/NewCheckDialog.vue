@@ -76,19 +76,10 @@
           <!-- Team fields -->
           <TeamFields v-model="teamData" />
 
-          <!-- Document drop area -->
+          <!-- Document viewer -->
           <v-row dense class="mb-2 flex-grow-1">
             <v-col cols="12">
-              <div
-                class="document-drop-area d-flex flex-column align-center justify-center rounded-xl"
-              >
-                <v-icon size="95" color="grey-lighten-1" opacity="55%">mdi-arrow-up-box</v-icon>
-                <p class="text-grey mt-4 text-center">
-                  Start by drag and drop<br />
-                  OTP, IC, AML, LO, ACRA for biz, and<br />
-                  other documents
-                </p>
-              </div>
+              <DocumentViewer v-model="documents" />
             </v-col>
           </v-row>
         </v-col>
@@ -100,12 +91,28 @@
           </div>
 
           <div class="right-content-scrollable flex-grow-1">
-            <PropertyFields
+            <FormFieldsSectionRight
+              :fields="propertyFields"
               v-model="propertyData"
               :disabled="!hasDocuments"
               submit-label="Submit"
               @submit="handleSubmit"
-            />
+            >
+              <v-row dense class="mt-3 mb-4">
+                <v-col cols="12">
+                  <v-btn
+                    block
+                    rounded="xl"
+                    color="grey-darken-3"
+                    class="text-none"
+                    style="letter-spacing: 0.4px"
+                    height="45px"
+                  >
+                    Go to Identity Check
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </FormFieldsSectionRight>
           </div>
         </v-col>
       </v-row>
@@ -115,11 +122,12 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
-import type { ButtonConfig } from '@/common/types'
-import DialogHeader from '@/components/dialog-sections/DialogHeader.vue'
+import type { ButtonConfig, Document } from '@/common/types'
+import DialogHeader from '@/components/dialog-sections/DialogHeaderFields.vue'
 import TeamFields from '@/components/dialog-sections/TeamFields.vue'
-import RoleSelector from '@/components/dialog-sections/RoleSelector.vue'
-import PropertyFields from '@/components/dialog-sections/PropertyFields.vue'
+import DocumentViewer from '@/components/dialog-sections/UploadViewDocument.vue'
+import RoleSelector from '@/components/dialog-sections/IndividualCommercialToggle.vue'
+import FormFieldsSectionRight from '@/components/dialog-sections/RightSideFields.vue'
 
 const emit = defineEmits<{
   (e: 'submit', data: typeof form): void
@@ -136,7 +144,7 @@ const form = reactive({
   phone: '',
   email: '',
   role: '',
-  roleType: 'individual' as 'individual' | 'corporate',
+  roleType: 'individual' as 'individual' | 'commercial',
 })
 
 const clientFlags = reactive({
@@ -150,25 +158,29 @@ const teamData = reactive({
   secretaryIc: '',
 })
 
-const propertyData = reactive({
-  propertyType: '',
-  checkEthnicQuota: false,
-  postcode: '',
-  floor: '',
-  unit: '',
-  block: '',
-  street: '',
-  buildingName: '',
-  propertyPrice: '',
-  optionDate: '',
-  optionExpiry: '',
-  completionDate: '',
-  weeksUponExercising: '',
-})
+const propertyData = reactive({})
 
-const uploadedDocuments = ref<File[]>([])
+// TODO: demo data to be removed
+const propertyTypeOptions = ['HDB Resale', 'Private', 'Commercial']
 
-const hasDocuments = computed(() => uploadedDocuments.value.length > 0)
+const propertyFields = [
+  { type: 'select', label: 'Property Type', model: 'propertyType', md: 5, items: propertyTypeOptions },
+  { type: 'text', label: 'Postcode', model: 'postcode', md: 4 },
+  { type: 'text', label: 'Floor', model: 'floor', md: 2 },
+  { type: 'text', label: 'Unit', model: 'unit', md: 2 },
+  { type: 'text', label: 'Block', model: 'block', md: 3 },
+  { type: 'text', label: 'Street', model: 'street', md: 6 },
+  { type: 'text', label: 'Building Name', model: 'buildingName', md: 5 },
+  { type: 'text', label: 'Property Price', model: 'propertyPrice', md: 3 },
+  { type: 'date', label: 'Option Date', model: 'optionDate', md: 4 },
+  { type: 'date', label: 'Option Expiry', model: 'optionExpiry', md: 4 },
+  { type: 'date', label: 'Completion Date', model: 'completionDate', md: 4 },
+  { type: 'text', label: 'No. of Weeks upon exercising', model: 'weeksUponExercising', md: 2 },
+]
+
+const documents = ref<Document[]>([])
+
+const hasDocuments = computed(() => documents.value.length > 0)
 
 function handleSubmit() {
   const payload = {
@@ -183,14 +195,6 @@ function handleSubmit() {
 </script>
 
 <style scoped>
-.document-drop-area {
-  background-color: #f5f5f5;
-  border: 2px dashed #e0e0e0;
-  min-height: 475px;
-  height: 100%;
-  padding-top: 60px;
-}
-
 .right-content-scrollable {
   overflow-y: auto;
   overflow-x: hidden;

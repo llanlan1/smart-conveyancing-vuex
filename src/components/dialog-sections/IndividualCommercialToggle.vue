@@ -20,7 +20,7 @@
         color="grey-darken-4"
       >
         <v-btn value="individual" class="text-none">Individual</v-btn>
-        <v-btn value="corporate" class="text-none">Corporate</v-btn>
+        <v-btn value="commercial" class="text-none">Commercial</v-btn>
       </v-btn-toggle>
     </div>
   </div>
@@ -31,17 +31,17 @@ import { ref, watch } from 'vue'
 
 const props = defineProps<{
   role?: string
-  type?: 'individual' | 'corporate'
+  type?: 'individual' | 'commercial'
   roleOptions?: string[]
 }>()
 
 const emit = defineEmits<{
   (e: 'update:role', value: string): void
-  (e: 'update:type', value: 'individual' | 'corporate'): void
+  (e: 'update:type', value: 'individual' | 'commercial'): void
 }>()
 
 const selectedRole = ref(props.role || '')
-const selectedType = ref<'individual' | 'corporate'>(props.type || 'individual')
+const selectedType = ref<'individual' | 'commercial'>(props.type || 'individual')
 
 const roleOptions = props.roleOptions || ['Client', 'Agent', 'Lawyer']
 

@@ -188,7 +188,7 @@
                   color="grey-darken-4"
                 >
                   <v-btn value="individual" class="text-none">Individual</v-btn>
-                  <v-btn value="corporate" class="text-none">Corporate</v-btn>
+                  <v-btn value="commercial" class="text-none">Commercial</v-btn>
                 </v-btn-toggle>
               </div>
             </div>
@@ -285,7 +285,7 @@ const newReferenceInput = reactive({
   value: '',
 })
 
-// Role type toggle (Individual/Corporate)
+// Role type toggle (Individual/Commercial)
 const roleType = ref('individual')
 
 // Watch for changes to reset the input when opening a new case
