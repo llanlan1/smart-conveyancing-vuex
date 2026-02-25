@@ -27,7 +27,7 @@
             </v-btn>
           </div>
           <v-select
-            v-model="form[field.model!]"
+            v-model="(form[field.model!] as string)"
             :items="field.items"
             variant="outlined"
             rounded="lg"
