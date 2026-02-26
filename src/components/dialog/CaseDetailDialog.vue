@@ -4,62 +4,23 @@
       <!-- Left Column -->
       <v-col md="6" class="dialog-card-text-half-content">
         <DialogHeader
-          :title="caseDetail.reference"
+          :title="caseDetail.caseRefNum"
           title-icon="edit"
-          :subtitle="systemReference"
+          :subtitle="sysGenRefNum"
           :buttons="buttons"
-          @update:title="handleTitleUpdate"
+          @update:title="handleCaseRefNumUpdate"
         />
 
-        <!-- Case Type row -->
-        <v-row dense class="mt-6 align-end">
-          <v-col md="3" class="d-flex align-center pb-0">
-            <v-label class="dialog-card-text-fields-label mb-2">Case Type</v-label>
-          </v-col>
-          <v-col md="3" class="d-flex align-center pb-0">
-            <v-label class="dialog-card-text-fields-label">Phone</v-label>
-            <span class="text-caption ml-auto mr-1">Client</span>
-            <v-checkbox v-model="clientFlags.phone" hide-details density="compact" class="ma-0 pa-0"></v-checkbox>
-          </v-col>
-          <v-col md="5" class="d-flex align-center pb-0">
-            <v-label class="dialog-card-text-fields-label">Email Address</v-label>
-            <span class="text-caption ml-auto mr-1">Client</span>
-            <v-checkbox v-model="clientFlags.email" hide-details density="compact" class="ma-0 pa-0"></v-checkbox>
-          </v-col>
-        </v-row>
-
-        <v-row dense class="mt-1">
-          <v-col md="3">
-            <v-select
-              v-model="form.caseType"
-              :items="caseTypeOptions"
-              variant="outlined"
-              rounded="lg"
-              density="compact"
-              hide-details
-            ></v-select>
-          </v-col>
-          <v-col md="3">
-            <v-text-field
-              v-model="form.phone"
-              variant="outlined"
-              rounded="lg"
-              density="compact"
-              hide-details
-              placeholder="87654321"
-            ></v-text-field>
-          </v-col>
-          <v-col md="5">
-            <v-text-field
-              v-model="form.email"
-              variant="outlined"
-              rounded="lg"
-              density="compact"
-              hide-details
-              placeholder="tan_alice@gmail.com"
-            ></v-text-field>
-          </v-col>
-        </v-row>
+        <!-- Case Type / Client Contact -->
+        <CaseTypeClientContactFields
+          v-model:case-type="form.caseType"
+          v-model:phone="form.phone"
+          v-model:email="form.email"
+          v-model:phone-client="clientFlags.phone"
+          v-model:email-client="clientFlags.email"
+          :case-type-options="caseTypeOptions"
+          email-placeholder="tan_alice@gmail.com"
+        />
 
         <!-- Team fields -->
         <TeamFields v-model="teamData" />
@@ -67,7 +28,7 @@
         <!-- Document viewer -->
         <v-row dense class="mb-2 flex-grow-1">
           <v-col cols="12">
-            <DocumentViewer v-model="documents" />
+            <DocumentUploadArea v-model="documents" />
           </v-col>
         </v-row>
       </v-col>
@@ -115,8 +76,9 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import type { ButtonConfig, Document, CaseDetail } from '@/common/types'
 import DialogHeader from '@/components/dialog-sections/DialogHeaderFields.vue'
+import CaseTypeClientContactFields from '@/components/dialog-sections/CaseTypeClientContactFields.vue'
 import TeamFields from '@/components/dialog-sections/TeamFields.vue'
-import DocumentViewer from '@/components/dialog-sections/UploadViewDocument.vue'
+import DocumentUploadArea from '@/components/dialog-sections/DocumentUploadArea.vue'
 import RoleSelector from '@/components/dialog-sections/IndividualCommercialToggle.vue'
 import FormFieldsSectionRight, { type FormFieldConfig } from '@/components/dialog-sections/RightSideFields.vue'
 
@@ -129,8 +91,8 @@ const emit = defineEmits<{
 const caseId = computed(() => route.params.id as string)
 
 const caseDetail = ref<CaseDetail>({
-  reference: '',
-  systemReference: '',
+  caseRefNum: '',
+  sysGenRefNum: '',
   address: '',
   caseType: '',
   client: ''
@@ -140,13 +102,13 @@ const buttons: ButtonConfig[] = [
   { label: 'Save Draft', icon: 'mdi-content-save', color: 'white' }
 ]
 
-const systemReference = computed(() => caseDetail.value.systemReference || 'SOW-1-2026')
+const sysGenRefNum = computed(() => caseDetail.value.sysGenRefNum || 'SOW-1-2026')
 
 onMounted(() => {
   // TODO: fetch case data from API using caseId
   caseDetail.value = {
-    reference: caseId.value || 'HS(JL).65431',
-    systemReference: 'SOW-1-2026',
+    caseRefNum: caseId.value || 'HS(JL).65431',
+    sysGenRefNum: 'SOW-1-2026',
     address: '123 ABCDE Ave 3 #01-02 123456',
     caseType: 'Sales',
     client: 'Alice Tan'
@@ -206,8 +168,8 @@ function handleNext() {
   emit('next')
 }
 
-function handleTitleUpdate(newTitle: string) {
-  caseDetail.value.reference = newTitle
+function handleCaseRefNumUpdate(newTitle: string) {
+  caseDetail.value.caseRefNum = newTitle
   // TODO: save to API
 }
 </script>

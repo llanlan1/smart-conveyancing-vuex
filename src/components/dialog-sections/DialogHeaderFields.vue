@@ -22,14 +22,14 @@
       <!-- Title mode -->
       <template v-else>
         <span
-          v-if="titleIcon === 'edit'"
+          v-if="titleIcon === 'edit' && title"
           class="header-title header-title-editable"
           @click="startEditing"
         >
           {{ title }}
           <v-icon size="14" class="ml-1">mdi-pencil</v-icon>
         </span>
-        <span v-else class="header-title">{{ title }}</span>
+        <span v-else-if="title" class="header-title">{{ title }}</span>
 
         <div v-if="subtitle" class="header-subtitle">{{ subtitle }}</div>
       </template>

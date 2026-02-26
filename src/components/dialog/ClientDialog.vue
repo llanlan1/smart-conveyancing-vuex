@@ -4,13 +4,12 @@
       <!-- Left Column -->
       <v-col md="6" class="dialog-card-text-half-content">
         <DialogHeader
-          :reference-number="caseDetail.reference"
-          :address="caseDetail.address"
-          :case-type="caseDetail.caseType"
+          :subtitle="sysGenRefNum"
+          :buttons="buttons"
         />
 
-        <CaseHeaderInfo
-          :reference-number="caseDetail.reference"
+        <CaseInfoLeftCopy
+          :reference-number="caseDetail.caseRefNum"
           :address="caseDetail.address"
           :case-type="caseDetail.caseType"
         />
@@ -22,46 +21,44 @@
               Remarks
               <v-icon size="14" class="ml-1">mdi-pencil</v-icon>
             </v-label>
-            <v-text-field
+            <v-textarea
               v-model="form.remarks"
               variant="outlined"
               rounded="lg"
               density="compact"
               hide-details
-              placeholder="Value"
-            ></v-text-field>
+              rows="3"
+            ></v-textarea>
           </v-col>
         </v-row>
 
-        <!-- Upload ID button -->
+        <!-- Upload ID / AML buttons -->
         <v-row dense class="mt-4">
-          <v-col md="5">
-            <v-btn
-              block
-              rounded="xl"
-              color="grey-darken-3"
-              class="text-none"
-              prepend-icon="mdi-upload"
-            >
-              Upload ID
-            </v-btn>
-          </v-col>
-          <v-col md="5">
-            <v-btn
-              block
-              rounded="xl"
-              variant="outlined"
-              class="text-none"
-            >
-              Go to AML Website
-            </v-btn>
+          <v-col cols="12">
+            <div class="action-btn-group">
+              <v-btn
+                rounded="xl"
+                color="grey-darken-3"
+                class="text-none"
+                append-icon="mdi-information-outline"
+              >
+                Upload ID
+              </v-btn>
+              <v-btn
+                rounded="xl"
+                variant="outlined"
+                class="text-none"
+              >
+                Go to AML Website
+              </v-btn>
+            </div>
           </v-col>
         </v-row>
 
         <!-- Document viewer -->
-        <v-row dense class="mt-4 flex-grow-1">
+        <v-row dense class="mt-4 flex-grow-1" align="stretch">
           <v-col cols="12">
-            <DocumentViewer v-model="documents" />
+            <DocumentUploadArea v-model="documents" />
           </v-col>
         </v-row>
       </v-col>
@@ -96,11 +93,11 @@
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import DialogHeader from '@/components/dialog-sections/ReadOnlyDialogHeader.vue'
-import CaseHeaderInfo from '@/components/dialog-sections/DialogHeaderFields.vue'
-import DocumentViewer from '@/components/dialog-sections/UploadViewDocument.vue'
+import type { ButtonConfig, Document, CaseDetail } from '@/common/types'
+import DialogHeader from '@/components/dialog-sections/DialogHeaderFields.vue'
+import CaseInfoLeftCopy from '@/components/dialog-sections/ReadOnlyDialogHeader.vue'
+import DocumentUploadArea from '@/components/dialog-sections/DocumentUploadArea.vue'
 import FormFieldsSection, { type FormFieldConfig } from '@/components/dialog-sections/RightSideFields.vue'
-import type { Document, CaseDetail } from '@/common/types'
 
 const route = useRoute()
 
@@ -108,12 +105,18 @@ const route = useRoute()
 const caseId = computed(() => route.params.id as string)
 
 const caseDetail = ref<CaseDetail>({
-  reference: '',
-  systemReference: '',
+  caseRefNum: '',
+  sysGenRefNum: '',
   address: '',
   caseType: '',
   client: ''
 })
+
+const buttons: ButtonConfig[] = [
+  { label: 'Save Draft', icon: 'mdi-content-save', color: 'white' }
+]
+
+const sysGenRefNum = computed(() => caseDetail.value.sysGenRefNum || 'SOW-1-2026')
 
 const form = reactive({
   remarks: '',
@@ -154,8 +157,8 @@ const canUploadAml = computed(() => hasIdUploaded.value)
 onMounted(() => {
   // TODO: fetch case data from API using caseId
   caseDetail.value = {
-    reference: caseId.value || 'HS(JL).65431',
-    systemReference: 'SOW-1-2026',
+    caseRefNum: caseId.value || 'HS(JL).65431',
+    sysGenRefNum: 'SOW-1-2026',
     address: '123 ABCDE Ave 3 #01-02 123456',
     caseType: 'Sales HDB Flat',
     client: 'Alice Tan'
@@ -179,5 +182,38 @@ function handleSubmit() {
 
 .dialog-card-text-half-content :deep(.v-row) {
   gap: 10px;
+}
+
+:deep(.header-subtitle) {
+  font-size: 24px;
+  letter-spacing: 1.2px;
+}
+
+:deep(.case-header-info .v-row) {
+  align-items: flex-start !important;
+}
+
+.flex-grow-1 :deep(.v-col) {
+  height: 100%;
+}
+
+.action-btn-group {
+  display: flex;
+  gap: 8.5px;
+  width: 100%;
+}
+
+.action-btn-group :deep(.v-btn) {
+  flex: 1;
+}
+
+.action-btn-group :deep(.v-btn:first-child) {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.action-btn-group :deep(.v-btn:last-child) {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
 }
 </style>

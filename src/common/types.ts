@@ -61,8 +61,8 @@ export interface TeamData {
 }
 
 export interface CaseDetail {
-  reference: string
-  systemReference: string
+  caseRefNum: string
+  sysGenRefNum: string
   address: string
   caseType: string
   client: string

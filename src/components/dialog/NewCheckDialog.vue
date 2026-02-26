@@ -11,67 +11,16 @@
             :buttons="buttons"
           />
 
-          <!-- Case Type row labels -->
-          <v-row dense class="mt-6 align-end">
-            <v-col md="3" class="d-flex align-center pb-0">
-              <v-label class="dialog-card-text-fields-label mb-2">Case Type</v-label>
-            </v-col>
-            <v-col md="3" class="d-flex align-center pb-0">
-              <v-label class="dialog-card-text-fields-label">Phone</v-label>
-              <span class="text-caption ml-auto mr-1">Client</span>
-              <v-checkbox
-                v-model="clientFlags.phone"
-                hide-details
-                density="compact"
-                class="ma-0 pa-0"
-              ></v-checkbox>
-            </v-col>
-            <v-col md="5" class="d-flex align-center pb-0">
-              <v-label class="dialog-card-text-fields-label">Email Address</v-label>
-              <span class="text-caption ml-auto mr-1">Client</span>
-              <v-checkbox
-                v-model="clientFlags.email"
-                hide-details
-                density="compact"
-                class="ma-0 pa-0"
-              ></v-checkbox>
-            </v-col>
-          </v-row>
-
-          <!-- Case Type row fields -->
-          <v-row dense class="mt-1">
-            <v-col md="3">
-              <v-select
-                v-model="form.caseType"
-                :items="caseTypeOptions"
-                variant="outlined"
-                rounded="lg"
-                density="compact"
-                hide-details
-                placeholder="Select"
-              ></v-select>
-            </v-col>
-            <v-col md="3">
-              <v-text-field
-                v-model="form.phone"
-                variant="outlined"
-                rounded="lg"
-                density="compact"
-                hide-details
-                placeholder="87654321"
-              ></v-text-field>
-            </v-col>
-            <v-col md="5">
-              <v-text-field
-                v-model="form.email"
-                variant="outlined"
-                rounded="lg"
-                density="compact"
-                hide-details
-                placeholder="jane@gmail.com"
-              ></v-text-field>
-            </v-col>
-          </v-row>
+          <!-- Case Type / Client Contact -->
+          <CaseTypeClientContactFields
+            v-model:case-type="form.caseType"
+            v-model:phone="form.phone"
+            v-model:email="form.email"
+            v-model:phone-client="clientFlags.phone"
+            v-model:email-client="clientFlags.email"
+            :case-type-options="caseTypeOptions"
+            email-placeholder="jane@gmail.com"
+          />
 
           <!-- Team fields -->
           <TeamFields v-model="teamData" />
@@ -79,7 +28,7 @@
           <!-- Document viewer -->
           <v-row dense class="mb-2 flex-grow-1">
             <v-col cols="12">
-              <DocumentViewer v-model="documents" />
+              <DocumentUploadArea v-model="documents" />
             </v-col>
           </v-row>
         </v-col>
@@ -124,10 +73,11 @@
 import { ref, reactive, computed } from 'vue'
 import type { ButtonConfig, Document } from '@/common/types'
 import DialogHeader from '@/components/dialog-sections/DialogHeaderFields.vue'
+import CaseTypeClientContactFields from '@/components/dialog-sections/CaseTypeClientContactFields.vue'
 import TeamFields from '@/components/dialog-sections/TeamFields.vue'
-import DocumentViewer from '@/components/dialog-sections/UploadViewDocument.vue'
+import DocumentUploadArea from '@/components/dialog-sections/DocumentUploadArea.vue'
 import RoleSelector from '@/components/dialog-sections/IndividualCommercialToggle.vue'
-import FormFieldsSectionRight from '@/components/dialog-sections/RightSideFields.vue'
+import FormFieldsSectionRight, { type FormFieldConfig } from '@/components/dialog-sections/RightSideFields.vue'
 
 const emit = defineEmits<{
   (e: 'submit', data: typeof form): void
@@ -163,7 +113,7 @@ const propertyData = reactive({})
 // TODO: demo data to be removed
 const propertyTypeOptions = ['HDB Resale', 'Private', 'Commercial']
 
-const propertyFields = [
+const propertyFields: FormFieldConfig[] = [
   { type: 'select', label: 'Property Type', model: 'propertyType', md: 5, items: propertyTypeOptions },
   { type: 'text', label: 'Postcode', model: 'postcode', md: 4 },
   { type: 'text', label: 'Floor', model: 'floor', md: 2 },

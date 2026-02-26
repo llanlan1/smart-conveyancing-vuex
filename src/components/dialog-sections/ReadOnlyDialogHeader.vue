@@ -1,6 +1,6 @@
 <template>
   <div class="case-header-info">
-    <v-row dense align="center">
+    <v-row dense align="center" justify="space-between">
       <v-col cols="auto">
         <div class="info-item">
           <v-label class="info-label">
@@ -9,7 +9,9 @@
               <v-icon size="14">mdi-content-copy</v-icon>
             </v-btn>
           </v-label>
-          <div class="info-value">{{ referenceNumber }}</div>
+          <div class="info-value">
+            <div v-for="(line, i) in referenceNumber.split('\n')" :key="i">{{ line }}</div>
+          </div>
         </div>
       </v-col>
       <v-col cols="auto">

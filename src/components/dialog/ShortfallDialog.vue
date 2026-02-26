@@ -3,25 +3,13 @@
     <v-row class="dialog-card-full-height-row">
       <!-- Left Column -->
       <v-col md="6" class="dialog-card-text-half-content">
-        <v-row dense align="center" justify="space-between">
-          <v-col>
-            <DialogHeader
-              :reference-number="caseDetail.reference"
-              :address="caseDetail.address"
-              :case-type="caseDetail.caseType"
-            />
-          </v-col>
-          <v-col cols="auto">
-            <v-btn
-              color="white"
-              rounded="lg"
-              class="text-none header-btn"
-              prepend-icon="mdi-content-save"
-            >
-              Save Draft
-            </v-btn>
-          </v-col>
-        </v-row>
+        <DialogHeader
+          :title="caseDetail.caseRefNum"
+          title-icon="edit"
+          :subtitle="sysGenRefNum"
+          :buttons="buttons"
+          @update:title="handleCaseRefNumUpdate"
+        />
 
         <CaseHeaderInfo
           ref-label="Client"
@@ -65,7 +53,7 @@
         <!-- Document viewer -->
         <v-row dense class="mt-4 flex-grow-1">
           <v-col cols="12">
-            <DocumentViewer v-model="documents" />
+            <DocumentUploadArea v-model="documents" />
           </v-col>
         </v-row>
       </v-col>
@@ -100,10 +88,10 @@
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import type { Document, CaseDetail } from '@/common/types'
-import DialogHeader from '@/components/dialog-sections/ReadOnlyDialogHeader.vue'
-import CaseHeaderInfo from '@/components/dialog-sections/DialogHeaderFields.vue'
-import DocumentViewer from '@/components/dialog-sections/UploadViewDocument.vue'
+import type { ButtonConfig, Document, CaseDetail } from '@/common/types'
+import DialogHeader from '@/components/dialog-sections/DialogHeaderFields.vue'
+import CaseHeaderInfo from '@/components/dialog-sections/ReadOnlyDialogHeader.vue'
+import DocumentUploadArea from '@/components/dialog-sections/DocumentUploadArea.vue'
 import FormFieldsSection, { type FormFieldConfig } from '@/components/dialog-sections/RightSideFields.vue'
 
 
@@ -113,13 +101,18 @@ const route = useRoute()
 const caseId = computed(() => route.params.id as string)
 
 const caseDetail = ref<CaseDetail>({
-  reference: '',
-  systemReference: '',
+  caseRefNum: '',
+  sysGenRefNum: '',
   address: '',
   caseType: '',
   client: ''
 })
 
+const buttons: ButtonConfig[] = [
+  { label: 'Save Draft', icon: 'mdi-content-save', color: 'white' }
+]
+
+const sysGenRefNum = computed(() => caseDetail.value.sysGenRefNum || 'SOW-1-2026')
 
 const form = reactive({
   remarks: '',
@@ -150,13 +143,18 @@ const shortfallFields: FormFieldConfig[] = [
 onMounted(() => {
   // TODO: fetch case data from API using caseId
   caseDetail.value = {
-    reference: caseId.value || 'HS(JL).65431',
-    systemReference: 'SOW-1-2026',
+    caseRefNum: caseId.value || 'HS(JL).65431',
+    sysGenRefNum: 'SOW-1-2026',
     address: '123 ABCDE Ave 3 #01-02 123456',
     caseType: 'Sales HDB Flat',
     client: 'Wong Xi An Sandy\nJorriah Ang Li Weng'
   }
 })
+
+function handleCaseRefNumUpdate(newTitle: string) {
+  caseDetail.value.caseRefNum = newTitle
+  // TODO: save to API
+}
 
 function handleSubmit() {
   console.log('Shortfall form submitted:', form)
