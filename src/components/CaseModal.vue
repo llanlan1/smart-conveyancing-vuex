@@ -330,68 +330,13 @@ function submit() {
 }
 </script>
 
-<style scoped>
-.reference-input {
-  max-width: 400px;
-}
-
-.document-drop-area {
-  background-color: #f5f5f5;
-  border: 2px dashed #e0e0e0;
-  min-height: 475px;
-  height: 100%;
-  padding-top: 60px;
-}
-
-.property-section {
-  border: 1px solid #e0e0e0;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.right-content-scrollable {
-  overflow-y: auto;
-  overflow-x: hidden;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 0.9rem;
-}
-
-.submit-section {
-  flex-shrink: 0;
-  padding-top: 16px;
-}
-
-.submit-area {
-  flex-shrink: 0;
-  height: 60px;
-  line-height: 60px;
-  text-align: center;
-}
-
-.submit-btn {
-  color: #9e9e9e;
-  letter-spacing: 0.5px;
-  font-weight: 400;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.submit-btn:hover {
-  color: #616161;
-}
-
-.right-side-non-card-content {
-  padding: 0.9rem 0 0 0.9rem;
-}
+<style scoped lang="scss">
+@use '@/styles/CaseModal.scss';
 
 .team-fields-row :deep(.v-col) {
   flex-grow: 1;
 }
 
-/* Add gap between all fields */
 .dialog-card-text-half-content :deep(.v-row) {
   gap: 10px;
 }

@@ -115,31 +115,3 @@ function handleSubmit() {
   emit('submit')
 }
 </script>
-
-<style scoped>
-.form-fields-section {
-  border: 1px solid #e0e0e0;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.submit-area {
-  flex-shrink: 0;
-  height: 60px;
-  line-height: 60px;
-  text-align: center;
-}
-
-.submit-btn {
-  color: #9e9e9e;
-  letter-spacing: 0.5px;
-  font-weight: 400;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.submit-btn:hover {
-  color: #616161;
-}
-</style>

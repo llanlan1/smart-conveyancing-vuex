@@ -88,32 +88,6 @@ const caseTypeLine3 = computed(() => {
 })
 </script>
 
-<style scoped>
-.case-header-info {
-  padding: 8px 0;
-}
-
-.info-item {
-  min-width: 100px;
-}
-
-.info-label {
-  font-size: 12px;
-  color: #666;
-  display: flex;
-  align-items: center;
-}
-
-.info-value {
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1.4;
-}
-
-.property-value,
-.case-type-value {
-  font-size: 12px;
-  font-weight: 400;
-  color: #333;
-}
+<style scoped lang="scss">
+@use '@/styles/ReadOnlyDialogHeader.scss';
 </style>

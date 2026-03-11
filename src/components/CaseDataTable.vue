@@ -163,51 +163,6 @@ const handleReferenceClick = (item: CaseData, refType: 'user' | 'system') => {
 }
 </script>
 
-<style scoped>
-.reference-links {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.reference-link {
-  text-decoration: none;
-  color: #1976d2;
-  font-size: 13px;
-  line-height: 1.4;
-}
-
-.reference-link:hover {
-  text-decoration: underline;
-}
-
-.user-ref {
-  font-weight: 600;
-}
-
-.system-ref {
-  color: #666;
-  font-size: 12px;
-}
-
-.roles-list {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.role-row {
-  font-size: 13px;
-  line-height: 1.4;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: clip;
-}
-
-.data-cell {
-  cursor: pointer;
-  padding-top: 12px !important;
-  padding-bottom: 12px !important;
-}
-
+<style scoped lang="scss">
+@use '@/styles/CaseDataTable.scss';
 </style>

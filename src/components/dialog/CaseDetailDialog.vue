@@ -174,20 +174,7 @@ function handleCaseRefNumUpdate(newTitle: string) {
 }
 </script>
 
-<style scoped>
-.right-content-scrollable {
-  overflow-y: auto;
-  overflow-x: hidden;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 0.9rem;
-}
-
-.right-side-non-card-content {
-  padding: 0.9rem 0 0 0.9rem;
-}
-
+<style scoped lang="scss">
 .dialog-card-text-half-content :deep(.v-row) {
   gap: 10px;
 }

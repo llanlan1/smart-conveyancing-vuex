@@ -86,15 +86,6 @@
   </v-dialog>
 </template>
 
-<style scoped>
-.dialog-close-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 10;
-}
-</style>
-
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'

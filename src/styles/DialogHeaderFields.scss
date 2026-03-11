@@ -1,0 +1,39 @@
+.dialog-header {
+  min-height: 48px;
+}
+
+.header-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  display: inline-flex;
+  align-items: center;
+}
+
+.header-title-editable {
+  cursor: pointer;
+}
+
+.header-title-editable:hover {
+  color: #1976d2;
+}
+
+.header-subtitle {
+  font-size: 13px;
+  color: #999;
+  margin-top: 2px;
+}
+
+.header-input {
+  max-width: 250px;
+}
+
+.header-buttons-col {
+  gap: 12px;
+}
+
+.header-btn {
+  box-shadow: none !important;
+  border: 1px solid #d8d8d8 !important;
+  letter-spacing: 0.1px !important;
+}
