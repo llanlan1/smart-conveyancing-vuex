@@ -126,18 +126,56 @@ const documents = ref<Document[]>([])
 const approvedTypeOptions = ['Loan Approved', 'CPF Approved']
 const grantTypeOptions = ['HDB Grant', 'CPF Grant']
 const incomeTypeOptions = ['NOA - Past 1 Year', 'NOA - Past 2 Years', 'NOA - Past 3 Years']
+const propertyProceedsTypeOptions = ['Property Sale', 'Other']
+const businessSaleProceedsTypeOptions = ['Business Sale', 'Other']
+const investmentBalanceTypeOptions = ['Investment Balance', 'Other']
+const giftTypeOptions = ['Gift', 'Other']
+const inheritanceTypeOptions = ['Inheritance', 'Other']
+const relationshipOptions = ['Parent', 'Sibling', 'Friend', 'Business Partner', 'Other']
+const giftRelationshipOptions = relationshipOptions
+const inheritanceRelationshipOptions = relationshipOptions
+const otherTypeOptions = ['Other']
 
 const shortfallFields: FormFieldConfig[] = [
   { type: 'text', label: 'Property Price', model: 'propertyPrice', md: 6, placeholder: 'SGD' },
   { type: 'text', label: 'Occupation', model: 'occupation', md: 6 },
+  { type: 'divider' },
   { type: 'text', label: 'Approved Amount', model: 'approvedAmount', md: 6, placeholder: 'SGD' },
   { type: 'select', label: 'Type', model: 'approvedType', md: 6, items: approvedTypeOptions, defaultValue: 'Loan Approved' },
+  { type: 'divider' },
   { type: 'text', label: 'Grant Amount', model: 'grantAmount', md: 6, placeholder: 'SGD' },
   { type: 'select', label: 'Type', model: 'grantType', md: 6, items: grantTypeOptions, defaultValue: 'HDB Grant' },
+  { type: 'divider' },
   { type: 'text', label: 'Bank Balance', model: 'bankBalance', md: 6, placeholder: 'SGD' },
   { type: 'select', label: 'Type', model: 'bankType', md: 6, items: ['Bank Statement'], defaultValue: 'Bank Statement' },
+  { type: 'divider' },
   { type: 'text', label: 'Annual Income - Y1', model: 'annualIncomeY1', md: 6, placeholder: 'SGD' },
   { type: 'select', label: 'Type', model: 'incomeTypeY1', md: 6, items: incomeTypeOptions, defaultValue: 'NOA - Past 1 Year' },
+  { type: 'text', label: 'Annual Income - Y2', model: 'annualIncomeY2', md: 6, placeholder: 'SGD' },
+  { type: 'select', label: 'Type', model: 'incomeTypeY2', md: 6, items: incomeTypeOptions, defaultValue: 'NOA - Past 2 Years' },
+  { type: 'text', label: 'Annual Income - Y3', model: 'annualIncomeY3', md: 6, placeholder: 'SGD' },
+  { type: 'select', label: 'Type', model: 'incomeTypeY3', md: 6, items: incomeTypeOptions, defaultValue: 'NOA - Past 3 Years' },
+  { type: 'divider' },
+  { type: 'text', label: 'Property Proceeds', model: 'propertyProceeds', md: 6, placeholder: 'SGD' },
+  { type: 'select', label: 'Type', model: 'propertyProceedsType', md: 6, items: propertyProceedsTypeOptions, defaultValue: 'Property Sale' },
+  { type: 'divider' },
+  { type: 'text', label: 'Business Sale Proceeds', model: 'businessSaleProceeds', md: 6, placeholder: 'SGD' },
+  { type: 'select', label: 'Type', model: 'businessSaleType', md: 6, items: businessSaleProceedsTypeOptions, defaultValue: 'Business Sale' },
+  { type: 'divider' },
+  { type: 'text', label: 'Investment Balance', model: 'investmentBalance', md: 6, placeholder: 'SGD' },
+  { type: 'select', label: 'Type', model: 'investmentBalanceType', md: 6, items: investmentBalanceTypeOptions, defaultValue: 'Investment' },
+  { type: 'divider' },
+  { type: 'text', label: 'Gift Amount', model: 'giftAmount', md: 6, placeholder: 'SGD' },
+  { type: 'select', label: 'Type', model: 'giftType', md: 6, items: giftTypeOptions, defaultValue: 'Gift' },
+  { type: 'select', label: 'Relationship', model: 'giftRelationship', md: 6, items: giftRelationshipOptions, defaultValue: 'Select One' },
+  { type: 'divider' },
+  { type: 'text', label: 'Inheritance Amount', model: 'inheritanceAmount', md: 6, placeholder: 'SGD' },
+  { type: 'select', label: 'Type', model: 'inheritanceType', md: 6, items: inheritanceTypeOptions, defaultValue: 'Inheritance' },
+  { type: 'select', label: 'Relationship', model: 'inheritanceRelationship', md: 6, items: inheritanceRelationshipOptions, defaultValue: 'Select One' },
+  { type: 'divider' },
+  { type: 'text', label: 'Other Amount', model: 'otherAmount', md: 6, placeholder: 'SGD' },
+  { type: 'select', label: 'Type', model: 'otherType', md: 6, items: otherTypeOptions, defaultValue: 'Other' },
+  { type: 'text', label: 'Please provide details', model: 'otherAmountDetails', md: 6, placeholder: 'Enter details here' },
 ]
 
 onMounted(() => {
@@ -165,8 +203,3 @@ function handleCalculate() {
 }
 </script>
 
-<style scoped lang="scss">
-.dialog-card-text-half-content :deep(.v-row) {
-  gap: 10px;
-}
-</style>

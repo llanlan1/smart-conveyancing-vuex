@@ -1,6 +1,6 @@
 <template>
   <div class="form-fields-section rounded-xl pt-6 px-6 d-flex flex-column">
-    <v-row dense>
+    <v-row>
       <template v-for="(field, index) in fields" :key="field.model || `divider-${index}`">
         <!-- Divider -->
         <v-col v-if="field.type === 'divider'" cols="12" class="my-2 px-0">
