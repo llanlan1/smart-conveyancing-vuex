@@ -34,7 +34,7 @@
       <v-divider></v-divider>
       <v-list-item class="user-info">
         <v-list-item-avatar class="user-avatar">
-          <v-img src="https://randomuser.me/api/portraits/men/85.jpg" />
+          <v-icon size="30">mdi-account-circle</v-icon>
         </v-list-item-avatar>
 
         <v-list-item-content>
