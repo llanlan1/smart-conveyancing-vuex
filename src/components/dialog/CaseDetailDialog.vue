@@ -107,7 +107,7 @@ const sysGenRefNum = computed(() => caseDetail.value.sysGenRefNum || 'SOW-1-2026
 onMounted(() => {
   // TODO: fetch case data from API using caseId
   caseDetail.value = {
-    caseRefNum: caseId.value || 'HS(JL).65431',
+    caseRefNum: caseId.value || 'HS(HL).65431',
     sysGenRefNum: 'SOW-1-2026',
     address: '123 ABCDE Ave 3 #01-02 123456',
     caseType: 'Sales',

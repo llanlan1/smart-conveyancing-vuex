@@ -53,6 +53,14 @@
               </div>
             </div>
           </template>
+          <template v-else-if="header.key === 'client'">
+            <div>{{ (props.item.client as string).split(/\s(?=[A-Z]\d{7}[A-Z]$)/)[0] }}</div>
+            <div>{{ (props.item.client as string).split(/\s(?=[A-Z]\d{7}[A-Z]$)/)[1] }}</div>
+          </template>
+          <template v-else-if="header.key === 'address'">
+            <div>{{ (props.item.address as string).split(/#/)[0]?.trim() }}</div>
+            <div>#{{ (props.item.address as string).split(/#/)[1] }}</div>
+          </template>
           <!-- Otherwise display as normal text -->
           <template v-else>
             {{ props.item[header.key as keyof CaseData] }}
@@ -107,18 +115,16 @@ const headers = ref<Array<{ title: string; key: string; align: 'start' | 'end' |
 
 // TODO: demo data to be removed
 const fakeData: CaseData[] = [
-  { name: 'HS(JL).65431', reference: 'HS(JL).65431', systemReference: 'SYS-001-2024', address: '123 ABC Avenue 6 #01-02 123456', caseType: 'Purchase Condo Resale', client: 'Tan Yu Jing Alice S1234567Z', roles: [{ type: 'BDM', name: 'Alice Tan' }, { type: 'LIC', name: 'Bob Lee' }, { type: 'SIC', name: 'Charlie Ng' }], createdAt: '2024-01-05' },
-  { name: 'HS(JL).65432', reference: 'HS(JL).65432', systemReference: 'SYS-002-2024', address: '456 DEF Street 8 #03-04 234567', caseType: 'Purchase Condo BUC', client: 'Tan Yu Jing Alice S1234567Z', roles: [{ type: 'BDM', name: 'David Lim' }, { type: 'LIC', name: 'Emily Wong' }, { type: 'SIC', name: 'Fiona Chua' }], createdAt: '2024-02-10' },
-  { name: 'HS(JL).65433', reference: 'HS(JL).65433', systemReference: 'SYS-003-2024', address: '789 GHI Road 10 #05-06 345678', caseType: 'Purchase Condo EC BUC', client: 'Tan Yu Jing Alice S1234567Z', roles: [{ type: 'BDM', name: 'Grace Ong' }, { type: 'LIC', name: 'Henry Koh' }, { type: 'SIC', name: 'Irene Teo' }], createdAt: '2024-03-15' },
-  { name: 'HS(JL).65434', reference: 'HS(JL).65434', systemReference: 'SYS-004-2024', address: '101 JKL Lane 12 #07-08 456789', caseType: 'Purchase Landed Resale', client: 'Tan Yu Jing Alice S1234567Z', roles: [{ type: 'BDM', name: 'James Goh' }, { type: 'LIC', name: 'Karen Sim' }, { type: 'SIC', name: 'Larry Yeo' }], createdAt: '2024-04-20' },
-  { name: 'HS(JL).65435', reference: 'HS(JL).65435', systemReference: 'SYS-005-2024', address: '202 MNO Drive 14 #09-10 567890', caseType: 'Purchase Landed BUC', client: 'Tan Yu Jing Alice S1234567Z', roles: [{ type: 'BDM', name: 'Alice Tan' }, { type: 'LIC', name: 'Nancy Ho' }, { type: 'SIC', name: 'Oscar Poh' }], createdAt: '2024-05-25' },
-  { name: 'HS(JL).65436', reference: 'HS(JL).65436', systemReference: 'SYS-006-2024', address: '303 PQR Blvd 16 #11-12 678901', caseType: 'Purchase Commercial BUC', client: 'Tan Yu Jing Alice S1234567Z', roles: [{ type: 'BDM', name: 'David Lim' }, { type: 'LIC', name: 'Bob Lee' }, { type: 'SIC', name: 'Rachel Ang' }], createdAt: '2024-06-30' },
-  { name: 'HS(JL).65437', reference: 'HS(JL).65437', systemReference: 'SYS-007-2024', address: '404 STU Court 18 #13-14 789012', caseType: 'Purchase Commercial Resale', client: 'Tan Yu Jing Alice S1234567Z', roles: [{ type: 'BDM', name: 'Grace Ong' }, { type: 'LIC', name: 'Emily Wong' }, { type: 'SIC', name: 'Charlie Ng' }], createdAt: '2024-07-05' },
-  { name: 'HS(JL).65438', reference: 'HS(JL).65438', systemReference: 'SYS-008-2024', address: '505 VWX Place 20 #15-16 890123', caseType: 'Purchase Condo Resale', client: 'Tan Yu Jing Alice S1234567Z', roles: [{ type: 'BDM', name: 'James Goh' }, { type: 'LIC', name: 'Henry Koh' }, { type: 'SIC', name: 'Fiona Chua' }], createdAt: '2024-08-10' },
-  { name: 'HS(JL).65439', reference: 'HS(JL).65439', systemReference: 'SYS-009-2024', address: '606 YZA Circle 22 #17-18 901234', caseType: 'Sales Landed Resale', client: 'Tan Yu Jing Alice S1234567Z', roles: [{ type: 'BDM', name: 'Alice Tan' }, { type: 'LIC', name: 'Karen Sim' }, { type: 'SIC', name: 'Irene Teo' }], createdAt: '2024-09-15' },
-  { name: 'HS(JL).65440', reference: 'HS(JL).65440', systemReference: 'SYS-010-2024', address: '707 BCD Way 24 #19-20 012345', caseType: 'Purchase Commercial Resale', client: 'Tan Yu Jing Alice S1234567Z', roles: [{ type: 'BDM', name: 'David Lim' }, { type: 'LIC', name: 'Nancy Ho' }, { type: 'SIC', name: 'Larry Yeo' }], createdAt: '2024-10-20' },
-  { name: 'HS(JL).65441', reference: 'HS(JL).65441', systemReference: 'SYS-011-2024', address: '808 EFG Terrace 26 #21-22 123456', caseType: 'Purchase Landed Resale', client: 'Tan Yu Jing Alice S1234567Z', roles: [{ type: 'BDM', name: 'Grace Ong' }, { type: 'LIC', name: 'Bob Lee' }, { type: 'SIC', name: 'Oscar Poh' }], createdAt: '2024-11-25' },
-  { name: 'HS(JL).65442', reference: 'HS(JL).65442', systemReference: 'SYS-012-2024', address: '909 HIJ Gardens 28 #23-24 234567', caseType: 'Purchase Landed Resale', client: 'Tan Yu Jing Alice S1234567Z', roles: [{ type: 'BDM', name: 'James Goh' }, { type: 'LIC', name: 'Emily Wong' }, { type: 'SIC', name: 'Rachel Ang' }], createdAt: '2024-12-30' },
+  { name: 'HS(HL).65431', reference: 'HS(HL).65431', systemReference: 'SYS-001-2024', address: '123 ABC Avenue 6 #01-02 123456', caseType: 'Purchase Condo Resale', client: 'Tan Yu Jing Alice S1234567Z', roles: [{ type: 'BDM', name: 'Alice Tan' }, { type: 'LIC', name: 'Bob Lee' }, { type: 'SIC', name: 'Charlie Ng' }], createdAt: '2024-01-05' },
+  { name: 'HS(AP).65432', reference: 'HS(AP).65432', systemReference: 'SYS-002-2024', address: '456 DEF Street 8 #03-04 234567', caseType: 'Purchase Condo BUC', client: 'Bernard Chua S1234567Z', roles: [{ type: 'BDM', name: 'David Lim' }, { type: 'LIC', name: 'Emily Wong' }, { type: 'SIC', name: 'Fiona Chua' }], createdAt: '2024-02-10' },
+  { name: 'HS(JS).65433', reference: 'HS(JS).65433', systemReference: 'SYS-003-2024', address: '789 GHI Road 10 #05-06 345678', caseType: 'Purchase Condo EC BUC', client: 'Tay Zhu Ying S1234567Z', roles: [{ type: 'BDM', name: 'Grace Ong' }, { type: 'LIC', name: 'Henry Koh' }, { type: 'SIC', name: 'Irene Teo' }], createdAt: '2024-03-15' },
+  { name: 'HS(JS).65434', reference: 'HS(JS).65434', systemReference: 'SYS-004-2024', address: '101 JKL Lane 12 #07-08 456789', caseType: 'Purchase Landed Resale', client: 'Margaret Chew Bao Yi S1234567Z', roles: [{ type: 'BDM', name: 'James Goh' }, { type: 'LIC', name: 'Karen Sim' }, { type: 'SIC', name: 'Larry Yeo' }], createdAt: '2024-04-20' },
+  { name: 'HS(HL).65435', reference: 'HS(HL).65435', systemReference: 'SYS-005-2024', address: '202 MNO Drive 14 #09-10 567890', caseType: 'Purchase Landed BUC', client: 'Teo Bing Hsu S1234567Z', roles: [{ type: 'BDM', name: 'Alice Tan' }, { type: 'LIC', name: 'Nancy Ho' }, { type: 'SIC', name: 'Oscar Poh' }], createdAt: '2024-05-25' },
+  { name: 'HS(AP).65436', reference: 'HS(AP).65436', systemReference: 'SYS-006-2024', address: '303 PQR Boulevard 16 #11-12 678901', caseType: 'Sales HDB Flat', client: 'Ben Tan Ah Teng S1234567Z', roles: [{ type: 'BDM', name: 'David Lim' }, { type: 'LIC', name: 'Bob Lee' }, { type: 'SIC', name: 'Rachel Ang' }], createdAt: '2024-06-30' },
+  { name: 'HS(HL).65437', reference: 'HS(HL).65437', systemReference: 'SYS-007-2024', address: '404 STU Court 18 #13-14 789012', caseType: 'Purchase Commercial Resale', client: 'Patrick Liaow Jin Yu S1234567Z', roles: [{ type: 'BDM', name: 'Grace Ong' }, { type: 'LIC', name: 'Emily Wong' }, { type: 'SIC', name: 'Charlie Ng' }], createdAt: '2024-07-05' },
+  { name: 'HS(AP).65438', reference: 'HS(AP).65438', systemReference: 'SYS-008-2024', address: '505 VWX Place 20 #15-16 890123', caseType: 'Purchase Condo Resale', client: 'Maggie Low Si Yun S1234567Z', roles: [{ type: 'BDM', name: 'James Goh' }, { type: 'LIC', name: 'Henry Koh' }, { type: 'SIC', name: 'Fiona Chua' }], createdAt: '2024-08-10' },
+  { name: 'HS(AP).65439', reference: 'HS(AP).65439', systemReference: 'SYS-009-2024', address: '606 YZA Circle 22 #17-18 901234', caseType: 'Sales Landed Resale', client: 'Titus Lau Yik Mun S1234567Z', roles: [{ type: 'BDM', name: 'Alice Tan' }, { type: 'LIC', name: 'Karen Sim' }, { type: 'SIC', name: 'Irene Teo' }], createdAt: '2024-09-15' },
+  { name: 'HS(HL).65440', reference: 'HS(HL).65440', systemReference: 'SYS-010-2024', address: '707 BCD Way 24 #19-20 012345', caseType: 'Purchase Commercial Resale', client: 'Derrick Goh S1234567Z', roles: [{ type: 'BDM', name: 'David Lim' }, { type: 'LIC', name: 'Nancy Ho' }, { type: 'SIC', name: 'Oscar Poh' }], createdAt: '2024-10-20' },
 ]
 
 const loadItems = ({

@@ -5,17 +5,18 @@
 .header-title {
   font-size: 18px;
   font-weight: 600;
-  color: #333;
+  color: #333 !important;
   display: inline-flex;
   align-items: center;
 }
 
 .header-title-editable {
   cursor: pointer;
+  color: #333 !important;
 }
 
 .header-title-editable:hover {
-  color: #1976d2;
+  color: #333 !important;
 }
 
 .header-subtitle {
