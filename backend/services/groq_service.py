@@ -6,9 +6,9 @@ from io import BytesIO
 
 import fitz  # pymupdf
 from docx import Document as DocxDocument
-from groq import Groq
+from groq import AsyncGroq
 
-_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+_client = AsyncGroq(api_key=os.getenv("GROQ_API_KEY"))
 
 # Llama 4 Scout — vision-capable, fast on Groq.
 # Swap to "meta-llama/llama-4-maverick-17b-128e-instruct" if you get access.
@@ -89,7 +89,7 @@ async def parse_document(file_bytes: bytes, mime_type: str) -> dict:
     # DOCX: extract text, send as text-only prompt (no vision needed)
     if mime_type == DOCX_MIME:
         text = _extract_docx_text(file_bytes)
-        response = _client.chat.completions.create(
+        response = await _client.chat.completions.create(
             model=MODEL,
             messages=[
                 {"role": "user", "content": f"{PARSE_PROMPT}\n\nDocument text:\n{text}"}
@@ -106,7 +106,7 @@ async def parse_document(file_bytes: bytes, mime_type: str) -> dict:
     encoded = base64.b64encode(file_bytes).decode("utf-8")
     data_url = f"data:{mime_type};base64,{encoded}"
 
-    response = _client.chat.completions.create(
+    response = await _client.chat.completions.create(
         model=MODEL,
         messages=[
             {
