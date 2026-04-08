@@ -33,10 +33,15 @@
           <div class="document-content">
             <div class="document-preview">
               <img
-                v-if="currentDocument?.previewUrl"
+                v-if="currentDocument?.file?.type.startsWith('image/')"
                 :src="currentDocument.previewUrl"
                 :alt="currentDocument.name"
                 class="preview-image"
+              />
+              <iframe
+                v-else-if="currentDocument?.file?.type === 'application/pdf'"
+                :src="(currentDocument.previewUrl ?? '') + '#toolbar=0&navpanes=0&scrollbar=1'"
+                class="preview-pdf"
               />
               <div v-else class="preview-placeholder">
                 <v-icon size="46" color="grey">mdi-file-document-outline</v-icon>
@@ -211,11 +216,10 @@ function handleDrop(event: DragEvent) {
 function addFiles(files: FileList) {
   const startIndex = documents.value.length
   const newDocs: Document[] = Array.from(files).map((file) => {
-    const isImage = file.type.startsWith('image/')
     return {
       name: file.name,
       type: '',
-      previewUrl: isImage ? URL.createObjectURL(file) : undefined,
+      previewUrl: URL.createObjectURL(file),
       file,
       parseStatus: 'processing' as const,
     }
