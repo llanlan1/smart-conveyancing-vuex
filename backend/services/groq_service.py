@@ -28,6 +28,17 @@ Singapore context:
 - LO = Letter of Offer (from bank for mortgage)
 - Convert all extracted dates to YYYY-MM-DD format
 
+OTP address rules (IMPORTANT):
+- An OTP contains multiple addresses: vendor's address, purchaser's address, AND the property address being transacted
+- Extract ONLY the property address (the property being sold/purchased), NOT the vendor's or purchaser's personal addresses
+- The property address is typically described as "the property", "the said property", "the above property", or appears under a heading like "property details", "description of property", or is the subject of the sale price
+- Ignore any addresses listed under vendor particulars, purchaser particulars, solicitor addresses, or personal residential addresses
+
+OTP address parsing rules:
+- Block: extract the block/lot number. This may appear as "Blk 10", "Block 10", or simply as a leading number before the street name (e.g. "10 Anson Road" → block is "10"). Extract the numeric portion only (eg "10", "123A")
+- Floor/Unit: often written as "floor-unit" (eg "15-02" → floor is "15", unit is "02"). Also written as "#15-02" → floor "15", unit "02". Extract each part separately
+- Street: the street name only, without block, floor, unit, or building name
+
 First identify the document type from this exact list, then extract all visible fields.
 Return ONLY valid JSON — no markdown, no code blocks, no extra text:
 
@@ -41,16 +52,16 @@ Return ONLY valid JSON — no markdown, no code blocks, no extra text:
     "citizenship": "<nationality eg Singapore, Malaysia, China, India, or null>",
     "phone": "<phone number, include +65 if Singapore number, or null>",
     "email": "<email address in lowercase, or null>",
-    "postcode": "<6-digit Singapore postal code, or null>",
-    "floor": "<floor number only as integer string eg 12, or null>",
-    "unit": "<unit number only eg 345, or null>",
-    "block": "<block number or HDB block number, or null>",
-    "street": "<street name without block/unit/floor, or null>",
-    "buildingName": "<building name or estate/condo name, or null>",
+    "postcode": "<6-digit Singapore postal code of the PROPERTY being transacted, not vendor/purchaser address, or null>",
+    "floor": "<floor number only, extracted from floor-unit notation eg #15-02 → 15, or null>",
+    "unit": "<unit number only, extracted from floor-unit notation eg #15-02 → 02, or null>",
+    "block": "<block/lot number of the property — from explicit Blk/Block label OR leading number before street name eg '10 Anson Road' → 10, or null>",
+    "street": "<street name of the PROPERTY only, without block/unit/floor, or null>",
+    "buildingName": "<building name or estate/condo name of the PROPERTY, or null>",
     "propertyPrice": "<numeric only sale price in SGD eg 650000, or null>",
     "optionDate": "<YYYY-MM-DD option date, or null>",
     "optionExpiry": "<YYYY-MM-DD option expiry date, or null>",
-    "completionDate": "<YYYY-MM-DD completion/completion date, or null>",
+    "completionDate": "<YYYY-MM-DD completion date, or null>",
     "weeksUponExercising": "<integer number of weeks as string eg 10, or null>"
   }
 }"""
