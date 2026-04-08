@@ -111,12 +111,12 @@ watch(form, () => {
   emit('update:modelValue', { ...form })
 }, { deep: true })
 
-watch(() => props.modelValue, (newVal) => {
+watch(() => ({ ...props.modelValue }), (newVal) => {
   if (!newVal) return
   for (const [key, value] of Object.entries(newVal)) {
     if (key in form) form[key] = value
   }
-}, { deep: true })
+})
 
 function handleSubmit() {
   emit('submit')
