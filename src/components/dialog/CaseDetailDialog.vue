@@ -28,7 +28,7 @@
         <!-- Document viewer -->
         <v-row dense class="mb-2 flex-grow-1">
           <v-col cols="12">
-            <DocumentUploadArea v-model="documents" />
+            <DocumentUploadArea v-model="documents" @fields-parsed="handleFieldsParsed" />
           </v-col>
         </v-row>
       </v-col>
@@ -74,7 +74,7 @@
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import type { ButtonConfig, Document, CaseDetail } from '@/common/types'
+import type { ButtonConfig, Document, CaseDetail, ParsedFields } from '@/common/types'
 import DialogHeader from '@/components/dialog-sections/DialogHeaderFields.vue'
 import CaseTypeClientContactFields from '@/components/dialog-sections/CaseTypeClientContactFields.vue'
 import TeamFields from '@/components/dialog-sections/TeamFields.vue'
@@ -163,6 +163,28 @@ const documents = ref<Document[]>([])
 const hasOtpUploaded = computed(() => {
   return documents.value.some(doc => doc.type === 'OTP')
 })
+
+function handleFieldsParsed({ detectedType, fields }: { index: number; detectedType: string; fields: ParsedFields }) {
+  if (detectedType === 'WhatsApp Screenshot') {
+    if (fields.phone) form.phone = fields.phone
+    if (fields.email) form.email = fields.email
+    return
+  }
+
+  if (detectedType === 'OTP') {
+    if (fields.postcode) propertyData.postcode = fields.postcode
+    if (fields.floor) propertyData.floor = fields.floor
+    if (fields.unit) propertyData.unit = fields.unit
+    if (fields.block) propertyData.block = fields.block
+    if (fields.street) propertyData.street = fields.street
+    if (fields.buildingName) propertyData.buildingName = fields.buildingName
+    if (fields.propertyPrice) propertyData.propertyPrice = fields.propertyPrice
+    if (fields.optionDate) propertyData.optionDate = fields.optionDate
+    if (fields.optionExpiry) propertyData.optionExpiry = fields.optionExpiry
+    if (fields.completionDate) propertyData.completionDate = fields.completionDate
+    if (fields.weeksUponExercising) propertyData.weeksUponExercising = fields.weeksUponExercising
+  }
+}
 
 function handleNext() {
   emit('next')

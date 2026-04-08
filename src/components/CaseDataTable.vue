@@ -61,6 +61,10 @@
             <div>{{ (props.item.address as string).split(/#/)[0]?.trim() }}</div>
             <div>#{{ (props.item.address as string).split(/#/)[1] }}</div>
           </template>
+                    <template v-else-if="header.key === 'caseType'">
+            <div>{{ (props.item.caseType as string).split(/\s(?=(?:EC )?BUC$|Resale$|Flat$|EC BUC$)/)[0] }}</div>
+            <div>{{ (props.item.caseType as string).split(/\s(?=(?:EC )?BUC$|Resale$|Flat$|EC BUC$)/)[1] }}</div>
+          </template>
           <!-- Otherwise display as normal text -->
           <template v-else>
             {{ props.item[header.key as keyof CaseData] }}

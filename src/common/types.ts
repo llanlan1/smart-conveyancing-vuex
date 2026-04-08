@@ -31,10 +31,36 @@ export interface ButtonConfig {
   rounded?: string
 }
 
+export type ParseStatus = 'idle' | 'processing' | 'done' | 'error'
+
+export interface ParsedFields {
+  nameOnId?: string
+  idNo?: string
+  asianChars?: string
+  dateOfBirth?: string
+  citizenship?: string
+  phone?: string
+  email?: string
+  postcode?: string
+  floor?: string
+  unit?: string
+  block?: string
+  street?: string
+  buildingName?: string
+  propertyPrice?: string
+  optionDate?: string
+  optionExpiry?: string
+  completionDate?: string
+  weeksUponExercising?: string
+}
+
 export interface Document {
   name: string
   type: string
   previewUrl?: string
+  file?: File
+  parseStatus?: ParseStatus
+  parsedFields?: ParsedFields
 }
 
 export interface PropertyFormData {

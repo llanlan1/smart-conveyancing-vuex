@@ -58,7 +58,10 @@
         <!-- Document viewer -->
         <v-row dense class="mt-4 flex-grow-1" align="stretch">
           <v-col cols="12">
-            <DocumentUploadArea v-model="documents" />
+            <DocumentUploadArea
+              v-model="documents"
+              @fields-parsed="handleFieldsParsed"
+            />
           </v-col>
         </v-row>
       </v-col>
@@ -67,11 +70,57 @@
       <v-col md="6" class="dialog-card-text-half-content">
         <div class="right-content-scrollable flex-grow-1 mt-6">
           <FormFieldsSection
-            :fields="clientFields"
+            :fields="mainClientFields"
             v-model="clientData"
             submit-label="Submit and Close"
             @submit="handleSubmit"
-          />
+          >
+            <!-- Dynamic additional person sections -->
+            <template v-for="(person, i) in additionalPersons" :key="person._key">
+              <v-divider class="my-4" />
+              <div class="text-body-2 font-weight-medium mb-3 px-1">
+                Additional Person {{ i + 1 }}
+              </div>
+              <v-row dense>
+                <v-col md="4" class="mb-2">
+                  <v-label class="dialog-card-text-fields-label">Role</v-label>
+                  <v-select v-model="person.role" :items="roleOptions" variant="outlined" rounded="lg" density="compact" hide-details />
+                </v-col>
+                <v-col md="4" class="mb-2">
+                  <v-label class="dialog-card-text-fields-label">Marital Status</v-label>
+                  <v-select v-model="person.maritalStatus" :items="maritalStatusOptions" variant="outlined" rounded="lg" density="compact" hide-details />
+                </v-col>
+                <v-col md="4" class="mb-2">
+                  <v-label class="dialog-card-text-fields-label">ID Type</v-label>
+                  <v-select v-model="person.idType" :items="idTypeOptions" variant="outlined" rounded="lg" density="compact" hide-details />
+                </v-col>
+                <v-col md="6" class="mb-2">
+                  <v-label class="dialog-card-text-fields-label">Name on ID</v-label>
+                  <v-text-field v-model="person.nameOnId" variant="outlined" rounded="lg" density="compact" hide-details />
+                </v-col>
+                <v-col md="6" class="mb-2">
+                  <v-label class="dialog-card-text-fields-label">ID No.</v-label>
+                  <v-text-field v-model="person.idNo" variant="outlined" rounded="lg" density="compact" hide-details />
+                </v-col>
+                <v-col md="6" class="mb-2">
+                  <v-label class="dialog-card-text-fields-label">Asian Characters on ID</v-label>
+                  <v-text-field v-model="person.asianChars" variant="outlined" rounded="lg" density="compact" hide-details />
+                </v-col>
+                <v-col md="6" class="mb-2">
+                  <v-label class="dialog-card-text-fields-label">Date of Birth</v-label>
+                  <v-text-field v-model="person.dateOfBirth" type="date" variant="outlined" rounded="lg" density="compact" hide-details />
+                </v-col>
+                <v-col md="6" class="mb-2">
+                  <v-label class="dialog-card-text-fields-label">Citizenship</v-label>
+                  <v-select v-model="person.citizenship" :items="countryOptions" variant="outlined" rounded="lg" density="compact" hide-details />
+                </v-col>
+                <v-col md="6" class="mb-2">
+                  <v-label class="dialog-card-text-fields-label">Residence / Jurisdiction</v-label>
+                  <v-select v-model="person.residence" :items="countryOptions" variant="outlined" rounded="lg" density="compact" hide-details />
+                </v-col>
+              </v-row>
+            </template>
+          </FormFieldsSection>
 
           <!-- Upload AML Document button -->
           <v-btn
@@ -93,7 +142,7 @@
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import type { ButtonConfig, Document, CaseDetail } from '@/common/types'
+import type { ButtonConfig, Document, CaseDetail, ParsedFields } from '@/common/types'
 import DialogHeader from '@/components/dialog-sections/DialogHeaderFields.vue'
 import CaseInfoLeftCopy from '@/components/dialog-sections/ReadOnlyDialogHeader.vue'
 import DocumentUploadArea from '@/components/dialog-sections/DocumentUploadArea.vue'
@@ -101,6 +150,22 @@ import FormFieldsSection, { type FormFieldConfig } from '@/components/dialog-sec
 
 const route = useRoute()
 
+const emit = defineEmits<{
+  (e: 'fields-parsed', payload: { detectedType: string; fields: ParsedFields }): void
+}>()
+
+interface AdditionalPerson {
+  _key: string
+  idNo: string
+  role: string
+  maritalStatus: string
+  idType: string
+  nameOnId: string
+  asianChars: string
+  dateOfBirth: string
+  citizenship: string
+  residence: string
+}
 
 const caseId = computed(() => route.params.id as string)
 
@@ -122,18 +187,25 @@ const form = reactive({
   remarks: '',
 })
 
-const clientData = reactive({})
-
+const clientData = reactive<Record<string, unknown>>({})
 const documents = ref<Document[]>([])
+const additionalPersons = ref<AdditionalPerson[]>([])
 
 // TODO: demo data to be removed
 const roleOptions = ['Main Client', 'Client', 'Nominee', 'POA - Donee', 'Trustee', 'Executor']
 const maritalStatusOptions = ['Unknown', 'Single', 'Married', 'Divorced', 'Widowed']
 const idTypeOptions = ['IC', 'Passport', 'FIN', 'Birth Certificate']
 const countryOptions = ['Singapore', 'Malaysia', 'Indonesia', 'China', 'India']
-const additionalPersonOptions = ['Select', 'None', 'Client', 'Nominee', 'POA - Donee', 'Trustee', 'Executor']
 
-const clientFields = computed<FormFieldConfig[]>(() => [
+const IC_TYPES = new Set(['IC—Front', 'IC—Back', 'IC—Both Sides', 'Passport'])
+
+const hasIdUploaded = computed(() => {
+  return documents.value.some(doc => IC_TYPES.has(doc.type))
+})
+
+const canUploadAml = computed(() => hasIdUploaded.value)
+
+const mainClientFields = computed<FormFieldConfig[]>(() => [
   { type: 'select', label: 'Role', model: 'role', md: 4, items: roleOptions, defaultValue: 'Main Client' },
   { type: 'select', label: 'Marital Status', model: 'maritalStatus', md: 4, items: maritalStatusOptions, defaultValue: 'Unknown' },
   { type: 'select', label: 'ID Type', model: 'idType', md: 4, items: idTypeOptions, defaultValue: 'IC' },
@@ -143,16 +215,7 @@ const clientFields = computed<FormFieldConfig[]>(() => [
   { type: 'date', label: 'Date of Birth', model: 'dateOfBirth', md: 6, copyable: true, disabled: !hasIdUploaded.value },
   { type: 'select', label: 'Citizenship', model: 'citizenship', md: 6, items: countryOptions, defaultValue: 'Singapore' },
   { type: 'select', label: 'Residence / Jurisdiction', model: 'residence', md: 6, items: countryOptions, defaultValue: 'Singapore' },
-  { type: 'divider' },
-  { type: 'select', label: 'Additional Person', model: 'additionalPerson', md: 6, items: additionalPersonOptions },
-  { type: 'select', label: 'ID Type', model: 'additionalIdType', md: 6, items: idTypeOptions, defaultValue: 'IC' },
 ])
-
-const hasIdUploaded = computed(() => {
-  return documents.value.some(doc => doc.type === 'IC')
-})
-
-const canUploadAml = computed(() => hasIdUploaded.value)
 
 onMounted(() => {
   // TODO: fetch case data from API using caseId
@@ -164,6 +227,82 @@ onMounted(() => {
     client: 'Alice Tan'
   }
 })
+
+function handleFieldsParsed({ detectedType, fields }: { index: number; detectedType: string; fields: ParsedFields }) {
+  if (detectedType === 'WhatsApp Screenshot') {
+    emit('fields-parsed', { detectedType, fields })
+    return
+  }
+
+  if (!IC_TYPES.has(detectedType)) return
+
+  const mainClientEmpty = !clientData.nameOnId && !clientData.idNo
+  const incomingId = fields.idNo
+
+  if (mainClientEmpty) {
+    populateClientData(clientData, fields, detectedType)
+    return
+  }
+
+  if (incomingId && clientData.idNo === incomingId) {
+    // Same person as main client — merge (fill gaps only)
+    mergeClientData(clientData, fields)
+    return
+  }
+
+  if (incomingId) {
+    const existing = additionalPersons.value.find(p => p.idNo === incomingId)
+    if (existing) {
+      mergePersonFields(existing, fields)
+    } else {
+      additionalPersons.value.push(buildAdditionalPerson(fields, detectedType))
+    }
+  } else {
+    // No ID number extracted — merge into last additional person or main client
+    const last = additionalPersons.value[additionalPersons.value.length - 1]
+    if (last) mergePersonFields(last, fields)
+  }
+}
+
+function populateClientData(target: Record<string, unknown>, fields: ParsedFields, detectedType: string) {
+  if (fields.nameOnId) target.nameOnId = fields.nameOnId
+  if (fields.idNo) target.idNo = fields.idNo
+  if (fields.asianChars) target.asianChars = fields.asianChars
+  if (fields.dateOfBirth) target.dateOfBirth = fields.dateOfBirth
+  if (fields.citizenship) target.citizenship = fields.citizenship
+  if (detectedType === 'Passport') target.idType = 'Passport'
+}
+
+function mergeClientData(target: Record<string, unknown>, fields: ParsedFields) {
+  if (!target.nameOnId && fields.nameOnId) target.nameOnId = fields.nameOnId
+  if (!target.idNo && fields.idNo) target.idNo = fields.idNo
+  if (!target.asianChars && fields.asianChars) target.asianChars = fields.asianChars
+  if (!target.dateOfBirth && fields.dateOfBirth) target.dateOfBirth = fields.dateOfBirth
+  if (!target.citizenship && fields.citizenship) target.citizenship = fields.citizenship
+}
+
+function mergePersonFields(person: AdditionalPerson, fields: ParsedFields) {
+  if (!person.nameOnId && fields.nameOnId) person.nameOnId = fields.nameOnId
+  if (!person.idNo && fields.idNo) person.idNo = fields.idNo
+  if (!person.asianChars && fields.asianChars) person.asianChars = fields.asianChars
+  if (!person.dateOfBirth && fields.dateOfBirth) person.dateOfBirth = fields.dateOfBirth
+  if (!person.citizenship && fields.citizenship) person.citizenship = fields.citizenship
+}
+
+function buildAdditionalPerson(fields: ParsedFields, detectedType: string): AdditionalPerson {
+  return {
+    _key: fields.idNo || `person-${Date.now()}`,
+    idNo: fields.idNo || '',
+    role: 'Client',
+    maritalStatus: 'Unknown',
+    idType: detectedType === 'Passport' ? 'Passport' : 'IC',
+    nameOnId: fields.nameOnId || '',
+    asianChars: fields.asianChars || '',
+    dateOfBirth: fields.dateOfBirth || '',
+    citizenship: fields.citizenship || 'Singapore',
+    residence: 'Singapore',
+  }
+}
 
 function handleSubmit() {
   console.log('Client form submitted:', form)
