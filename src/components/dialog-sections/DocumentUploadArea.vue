@@ -33,10 +33,15 @@
           <div class="document-content">
             <div class="document-preview">
               <img
-                v-if="currentDocument?.previewUrl"
-                :src="currentDocument.previewUrl"
-                :alt="currentDocument.name"
+                v-if="currentFileType === 'image'"
+                :src="currentDocument?.previewUrl"
+                :alt="currentDocument?.name"
                 class="preview-image"
+              />
+              <iframe
+                v-else-if="currentFileType === 'pdf'"
+                :src="currentDocument?.previewUrl"
+                class="preview-pdf"
               />
               <div v-else class="preview-placeholder">
                 <v-icon size="46" color="grey">mdi-file-document-outline</v-icon>
@@ -158,6 +163,14 @@ const fileInput = ref<HTMLInputElement | null>(null)
 
 const currentDocument = computed(() => documents.value[currentIndex.value])
 
+const currentFileType = computed(() => {
+  const file = currentDocument.value?.file
+  if (!file) return null
+  if (file.type.startsWith('image/')) return 'image'
+  if (file.type === 'application/pdf') return 'pdf'
+  return 'other'
+})
+
 // TODO: demo data to be removed
 const documentTypes = ['OTP', 'IC—Front', 'IC—Back', 'IC—Both Sides', 'Passport', 'WhatsApp Screenshot', 'AML', 'LO', 'ACRA', 'Others']
 
@@ -210,11 +223,10 @@ function handleDrop(event: DragEvent) {
 function addFiles(files: FileList) {
   const startIndex = documents.value.length
   const newDocs: Document[] = Array.from(files).map((file) => {
-    const isImage = file.type.startsWith('image/')
     return {
       name: file.name,
       type: '',
-      previewUrl: isImage ? URL.createObjectURL(file) : undefined,
+      previewUrl: URL.createObjectURL(file),
       file,
       parseStatus: 'processing' as const,
     }
@@ -252,6 +264,14 @@ async function parseDocument(index: number) {
 
     emit('update:modelValue', [...documents.value])
     emit('fields-parsed', { index, detectedType: doc.type, fields: result.fields })
+
+    setTimeout(() => {
+      const d = documents.value[index]
+      if (d?.parseStatus === 'done') {
+        d.parseStatus = 'idle'
+        emit('update:modelValue', [...documents.value])
+      }
+    }, 3000)
   } catch {
     doc.parseStatus = 'error'
     emit('update:modelValue', [...documents.value])
