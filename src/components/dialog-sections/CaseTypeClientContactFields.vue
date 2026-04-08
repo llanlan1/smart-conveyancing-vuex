@@ -8,7 +8,7 @@
       <span class="text-caption ml-auto mr-1">Client</span>
       <v-checkbox
         :model-value="phoneClient"
-        @update:model-value="$emit('update:phoneClient', $event)"
+        @update:model-value="$emit('update:phoneClient', !!$event)"
         hide-details
         density="compact"
         class="ma-0 pa-0"
@@ -19,7 +19,7 @@
       <span class="text-caption ml-auto mr-1">Client</span>
       <v-checkbox
         :model-value="emailClient"
-        @update:model-value="$emit('update:emailClient', $event)"
+        @update:model-value="$emit('update:emailClient', !!$event)"
         hide-details
         density="compact"
         class="ma-0 pa-0"

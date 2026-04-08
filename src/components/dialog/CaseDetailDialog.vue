@@ -137,7 +137,7 @@ const teamData = reactive({
   secretaryIc: ''
 })
 
-const propertyData = reactive({})
+const propertyData = reactive<Record<string, string>>({})
 
 // TODO: demo data to be removed
 const propertyTypeOptions = ['HDB Resale', 'Private', 'Commercial']
