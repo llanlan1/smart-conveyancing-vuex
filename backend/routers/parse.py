@@ -1,28 +1,40 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File
 
-from services.gemini import parse_document
+from services.groq_service import parse_document
 
 router = APIRouter()
 
-_MIME_FALLBACKS = {
-    ".pdf": "application/pdf",
-    ".jpg": "image/jpeg",
+# Whitelist: extension → canonical MIME type
+_ALLOWED = {
+    ".png":  "image/png",
+    ".jpg":  "image/jpeg",
     ".jpeg": "image/jpeg",
-    ".png": "image/png",
     ".webp": "image/webp",
+    ".gif":  "image/gif",
+    ".bmp":  "image/bmp",
     ".heic": "image/heic",
     ".heif": "image/heif",
+    ".tiff": "image/tiff",
+    ".tif":  "image/tiff",
+    ".pdf":  "application/pdf",
+    ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 }
 
 
 @router.post("/parse-document")
 async def parse_doc(file: UploadFile = File(...)):
-    content = await file.read()
+    filename = file.filename or ""
+    ext = ("." + filename.rsplit(".", 1)[-1].lower()) if "." in filename else ""
 
-    mime_type = file.content_type or "application/octet-stream"
-    if mime_type == "application/octet-stream" and file.filename:
-        suffix = "." + file.filename.rsplit(".", 1)[-1].lower()
-        mime_type = _MIME_FALLBACKS.get(suffix, mime_type)
+    if ext not in _ALLOWED:
+        raise HTTPException(
+            status_code=415,
+            detail=f"Unsupported file type '{ext}'. Allowed: {', '.join(_ALLOWED)}"
+        )
+
+    # Always derive MIME from extension — never trust the browser-supplied value
+    mime_type = _ALLOWED[ext]
+    content = await file.read()
 
     try:
         result = await parse_document(content, mime_type)
