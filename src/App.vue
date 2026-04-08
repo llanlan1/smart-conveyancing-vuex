@@ -10,7 +10,7 @@
     <v-navigation-drawer v-if="!isAuthRoute" app location="left" permanent disable-resize-watcher class="nav-drawer">
       <div class="app-bar-layout">
         <v-img
-          src="/src/assets/images/logo.jpg"
+          :src="logoUrl"
           alt="Company Logo"
           class="logo-img"
         ></v-img>
@@ -54,6 +54,7 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
+import logoUrl from '@/assets/images/logo.jpg'
 const route = useRoute()
 
 // Determines if the current route is a public/auth route (e.g., /login)

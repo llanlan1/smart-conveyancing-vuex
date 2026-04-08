@@ -1,17 +1,19 @@
 import base64
 import json
+import logging
 import os
 import re
+import time
 from io import BytesIO
 
 import fitz  # pymupdf
 from docx import Document as DocxDocument
 from groq import AsyncGroq
 
+logger = logging.getLogger(__name__)
+
 _client = AsyncGroq(api_key=os.getenv("GROQ_API_KEY"))
 
-# Llama 4 Scout — vision-capable, fast on Groq.
-# Swap to "meta-llama/llama-4-maverick-17b-128e-instruct" if you get access.
 MODEL = "meta-llama/llama-4-scout-17b-16e-instruct"
 
 PARSE_PROMPT = """You are a document parser for a Singapore conveyancing law firm.
@@ -62,15 +64,13 @@ DOCX_MIME = "application/vnd.openxmlformats-officedocument.wordprocessingml.docu
 
 
 def _pdf_to_image_bytes(file_bytes: bytes) -> bytes:
-    """Convert the first page of a PDF to PNG bytes at 200 dpi."""
     doc = fitz.open(stream=file_bytes, filetype="pdf")
     page = doc[0]
-    pix = page.get_pixmap(dpi=200)
+    pix = page.get_pixmap(dpi=120)  # 120 dpi — sufficient for text, much faster than 200
     return pix.tobytes("png")
 
 
 def _extract_docx_text(file_bytes: bytes) -> str:
-    """Extract plain text from a DOCX file."""
     doc = DocxDocument(BytesIO(file_bytes))
     return "\n".join(para.text for para in doc.paragraphs if para.text.strip())
 
@@ -86,24 +86,29 @@ def _parse_response(text: str) -> dict:
 
 
 async def parse_document(file_bytes: bytes, mime_type: str) -> dict:
-    # DOCX: extract text, send as text-only prompt (no vision needed)
+    t0 = time.monotonic()
+
     if mime_type == DOCX_MIME:
         text = _extract_docx_text(file_bytes)
+        logger.info(f"[parse] docx extracted in {time.monotonic()-t0:.2f}s")
         response = await _client.chat.completions.create(
             model=MODEL,
             messages=[
                 {"role": "user", "content": f"{PARSE_PROMPT}\n\nDocument text:\n{text}"}
             ],
         )
+        logger.info(f"[parse] groq responded in {time.monotonic()-t0:.2f}s total")
         return _parse_response(response.choices[0].message.content)
 
-    # PDF: convert first page to image, then fall through to vision
     if mime_type == "application/pdf":
         file_bytes = _pdf_to_image_bytes(file_bytes)
         mime_type = "image/png"
+        logger.info(f"[parse] pdf→image in {time.monotonic()-t0:.2f}s")
 
-    # Images: send directly to vision model
     encoded = base64.b64encode(file_bytes).decode("utf-8")
+    payload_kb = len(encoded) / 1024
+    logger.info(f"[parse] image encoded — payload {payload_kb:.0f} KB")
+
     data_url = f"data:{mime_type};base64,{encoded}"
 
     response = await _client.chat.completions.create(
@@ -118,4 +123,5 @@ async def parse_document(file_bytes: bytes, mime_type: str) -> dict:
             }
         ],
     )
+    logger.info(f"[parse] groq responded in {time.monotonic()-t0:.2f}s total")
     return _parse_response(response.choices[0].message.content)
