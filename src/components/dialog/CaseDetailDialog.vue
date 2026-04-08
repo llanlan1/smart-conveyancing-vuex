@@ -165,6 +165,7 @@ const hasOtpUploaded = computed(() => {
 })
 
 function handleFieldsParsed({ detectedType, fields }: { index: number; detectedType: string; fields: ParsedFields }) {
+  console.log('[handleFieldsParsed] called', { detectedType, fields })
   if (detectedType === 'WhatsApp Screenshot') {
     if (fields.phone) form.phone = fields.phone
     if (fields.email) form.email = fields.email

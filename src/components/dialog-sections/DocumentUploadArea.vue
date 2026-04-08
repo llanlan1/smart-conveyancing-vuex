@@ -245,12 +245,14 @@ async function parseDocument(index: number) {
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
 
     const result = await res.json()
+    console.log('[parse] result:', result)
 
     doc.type = VALID_TYPES.has(result.detected_type) ? result.detected_type : 'Others'
     doc.parseStatus = 'done'
     doc.parsedFields = result.fields
 
     emit('update:modelValue', [...documents.value])
+    console.log('[parse] emitting fields-parsed', { detectedType: doc.type, fields: result.fields })
     emit('fields-parsed', { index, detectedType: doc.type, fields: result.fields })
   } catch {
     doc.parseStatus = 'error'
