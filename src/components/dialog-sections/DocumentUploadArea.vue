@@ -38,11 +38,6 @@
                 :alt="currentDocument?.name"
                 class="preview-image"
               />
-              <iframe
-                v-else-if="currentFileType === 'pdf'"
-                :src="currentDocument?.previewUrl"
-                class="preview-pdf"
-              />
               <div v-else class="preview-placeholder">
                 <v-icon size="46" color="grey">mdi-file-document-outline</v-icon>
               </div>
