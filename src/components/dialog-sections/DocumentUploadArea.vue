@@ -33,9 +33,9 @@
           <div class="document-content">
             <div class="document-preview">
               <img
-                v-if="currentFileType === 'image'"
-                :src="currentDocument?.previewUrl"
-                :alt="currentDocument?.name"
+                v-if="currentDocument?.previewUrl"
+                :src="currentDocument.previewUrl"
+                :alt="currentDocument.name"
                 class="preview-image"
               />
               <div v-else class="preview-placeholder">
@@ -158,13 +158,6 @@ const fileInput = ref<HTMLInputElement | null>(null)
 
 const currentDocument = computed(() => documents.value[currentIndex.value])
 
-const currentFileType = computed(() => {
-  const file = currentDocument.value?.file
-  if (!file) return null
-  if (file.type.startsWith('image/')) return 'image'
-  if (file.type === 'application/pdf') return 'pdf'
-  return 'other'
-})
 
 // TODO: demo data to be removed
 const documentTypes = ['OTP', 'IC—Front', 'IC—Back', 'IC—Both Sides', 'Passport', 'WhatsApp Screenshot', 'AML', 'LO', 'ACRA', 'Others']
@@ -218,10 +211,11 @@ function handleDrop(event: DragEvent) {
 function addFiles(files: FileList) {
   const startIndex = documents.value.length
   const newDocs: Document[] = Array.from(files).map((file) => {
+    const isImage = file.type.startsWith('image/')
     return {
       name: file.name,
       type: '',
-      previewUrl: URL.createObjectURL(file),
+      previewUrl: isImage ? URL.createObjectURL(file) : undefined,
       file,
       parseStatus: 'processing' as const,
     }
