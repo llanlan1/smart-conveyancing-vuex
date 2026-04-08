@@ -18,7 +18,7 @@
     <div class="document-display rounded-xl" :class="{ 'drag-over': isDragging }">
       <template v-if="documents.length > 0">
         <!-- Document carousel -->
-        <div class="document-carousel">
+        <div class="document-carousel" :class="{ 'pdf-mode': currentDocument?.file?.type === 'application/pdf' }">
           <v-btn
             icon
             variant="text"
@@ -38,11 +38,12 @@
                 :alt="currentDocument.name"
                 class="preview-image"
               />
-              <iframe
-                v-else-if="currentDocument?.file?.type === 'application/pdf'"
-                :src="(currentDocument.previewUrl ?? '') + '#toolbar=0&navpanes=0&scrollbar=1'"
-                class="preview-pdf"
-              />
+              <div v-else-if="currentDocument?.file?.type === 'application/pdf'" class="preview-pdf-container">
+                <iframe
+                  :src="(currentDocument.previewUrl ?? '') + '#toolbar=0&navpanes=0'"
+                  class="preview-pdf"
+                />
+              </div>
               <div v-else class="preview-placeholder">
                 <v-icon size="46" color="grey">mdi-file-document-outline</v-icon>
               </div>

@@ -19,6 +19,23 @@
   align-items: center;
   position: relative;
   padding: 16px;
+
+  &.pdf-mode {
+    padding: 0;
+    align-items: stretch;
+
+    .document-content {
+      padding: 0;
+      align-items: stretch;
+      height: 100%;
+    }
+
+    .document-preview {
+      max-height: none;
+      height: 100%;
+      overflow: hidden;
+    }
+  }
 }
 
 .nav-btn {
@@ -93,11 +110,20 @@
   object-fit: contain;
 }
 
-.preview-pdf {
+.preview-pdf-container {
+  position: relative;
   width: 100%;
-  height: 350px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.preview-pdf {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% + 20px);
+  height: calc(100% + 20px);
   border: none;
-  display: block;
 }
 
 .preview-placeholder {
